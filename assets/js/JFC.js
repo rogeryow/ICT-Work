@@ -21,39 +21,28 @@ const control = {
 	},
 
 	afterInit: function(){
-		var table = ''
-		const url = `${getPath.path}control/getTableUsers`
-		console.log(url)
-
-		table = $('#table').DataTable({ 
-	        "bLengthChange": false,
-	        "bFilter": false,
-	        "bDestroy": true,
-	        "processing": true, 
-	        "serverSide": true, 
-	        "order": [],
-
-	        "ajax": {
-	            "url": url,
-	            "type": "POST",
-	        },
-
-	        dom: 'Bfrtip',
-
-	        "columnDefs": [
-	        { 
-	            "orderable": false, 
-	        },
-	        ],
-
-    	});
-
+			dataTable()	
 	}
 
 }
 
-class dataTable{
+function dataTable(){
+	let table = document.querySelector("#table")
+	const url = `${getPath.path}control/getTableUsers`
+	console.log(url)
 
+	table = $('#table').dataTable({
+		"bLengthChange": false,
+        "bFilter": false,
+        "bDestroy": true,
+        "processing": true, 
+        "serverSide": true, 
+
+        "ajax": {
+            "url": url,
+            "type": "POST",
+        },
+	})
 }
 
 document.addEventListener('DOMContentLoaded', control.init)
