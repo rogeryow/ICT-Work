@@ -12,10 +12,10 @@
     <table id="table" class="table table-striped table-hover" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th style="width: 25px; ">ID</th>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Gender</th>
-                <th>birth</th>
+                <th>Contact</th>
             </tr>
         </thead>
         <tbody>
@@ -23,5 +23,7 @@
     </table>
 
     <script type="module" src="<?php echo base_url('assets/js/JFC.js')?>"></script>
+
+    <script type="text/javascript"></script>
 </body>
 </html>

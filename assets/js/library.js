@@ -16,14 +16,18 @@ export function loadCSS(url){
    })
 }
 	
-export function loadScript(url){
-	const urlSet = new Set(url)
-   	urlSet.forEach((link) => {
-		const body = document.querySelector('body')
-		const scriptTag = document.createElement('script')
-		scriptTag.type = 'text/javascript'
-		scriptTag.async = true
-		scriptTag.src = link
-		body.prepend(scriptTag)
-   	})
+export async function loadScript(files){
+	for(const file of files) {
+		await createScriptTag(file)
+	}
+}
+
+function createScriptTag(file){
+	const body = document.querySelector('body')
+	const scriptTag = document.createElement('script')
+	scriptTag.type = 'text/javascript'
+	scriptTag.async = false
+	scriptTag.src = file
+	body.prepend(scriptTag)
+	console.log('it works')
 }

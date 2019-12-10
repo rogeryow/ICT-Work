@@ -8,11 +8,11 @@ const control = {
 		],
 
 		scriptFiles: [
-			// `${getPath.path}assets/datatables/js/jquery.dataTables.min.js`,
-			// `${getPath.path}assets/datatables/js/dataTables.bootstrap.js`,
-			// `${getPath.path}assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js`,
+			`${getPath.path}assets/jquery/jquery-2.1.4.min.js`,
 			`${getPath.path}assets/bootstrap/js/bootstrap.min.js`,
-			`${getPath.path}assets/jquery/jquery-3.4.1.js`
+			`${getPath.path}assets/datatables/js/jquery.dataTables.min.js`,
+			`${getPath.path}assets/datatables/js/dataTables.bootstrap.js`,
+			`${getPath.path}assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js`
 		],
 	
 	init: function(){
@@ -20,80 +20,45 @@ const control = {
 		loadScript(control.scriptFiles)
 	},
 
-	complete: function(){
-		
+	afterInit: function(){
+		var table = ''
+		const url = `${getPath.path}control/getTableUsers`
+		console.log(url)
+
+		table = $('#table').DataTable({ 
+	        "bLengthChange": false,
+	        "bFilter": false,
+	        "bDestroy": true,
+	        "processing": true, 
+	        "serverSide": true, 
+	        "order": [],
+
+	        "ajax": {
+	            "url": url,
+	            "type": "POST",
+	        },
+
+	        dom: 'Bfrtip',
+
+	        "columnDefs": [
+	        { 
+	            "orderable": false, 
+	        },
+	        ],
+
+    	});
+
 	}
 
 }
 
-document.addEventListener('DOMContentLoaded', control.init)
-window.onload = function(){
-	// table2 = $('#table2').DataTable({ 
+class dataTable{
 
- //        "bLengthChange": false,
- //        "bFilter": false,
- //        "bDestroy": true,
- //        "processing": true,
- //        "serverSide": true, 
- //        "order": [], 
-
- //        "ajax": {
- //            "url": getPath.path + "disability_list",
- //            "type": "POST",
- //            "data": {
- //                "name": name,
- //            }
- //        },
-
- //        dom: 'Bfrtip',
- //        buttons: [
- //            {
- //                extend: 'copyHtml5',
- //                exportOptions: {
- //                    columns: [ 0, ':visible' ]
- //                }
- //            },
- //            {
- //                extend: 'csv',
- //                exportOptions: {
- //                    columns: ':visible'
- //                }
- //            },
- //            {
- //                extend: 'excel',
- //                exportOptions: {
- //                    columns: ':visible'
- //                }
- //            },
- //            {
- //                extend: 'pdfHtml5',
- //                exportOptions: {
- //                    columns: [ 0, 1, 2]
- //                },
- //            },
- //            {
- //                extend: 'print',
- //                exportOptions: {
- //                    columns: ':visible'
- //                }
- //            },
- //        ],
-        // buttons: [
-        //     'copy', 'csv', 'excel', 'pdf', 'print',
-        // ]
-
-
-        // "columnDefs": [ {
-        //     "targets": -1,
-        //     "data": null,
-        //     "defaultContent": "<button>Click!</button>"
-        // } ]
-
-        // https://datatables.net/examples/ajax/null_data_source.html
-
-    // });
 }
-// document.addEventListener('onload', control.complete)
+
+document.addEventListener('DOMContentLoaded', control.init)
+window.onload = control.afterInit
+	
 
 // #if pages close
 // window.onunload

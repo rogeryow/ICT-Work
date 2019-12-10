@@ -15,8 +15,38 @@ class Control extends CI_Controller {
 		$this->load->view('View');
 	}
 
-	public function tableList(){
-		
+	public function getUsers(){
+		return $this->control->get_json_result('users');
+	}
+
+	public function getTableUsers(){
+		$cols = array("id","surname","gender","contact");
+		$this->control->set_select($cols);
+		$this->control->set_table("users");
+		$this->control->set_column_order($cols);
+
+		$list = $this->control->get_datatables();
+		$data = array();
+		$no = $_POST['start'];
+		foreach ($list as $val) {
+			$no++;
+			$row = array();
+			$row[] = $val->id;
+			$row[] = $val->surname;
+			$row[] = $val->gender;
+			$row[] = $val->contact;
+
+			$data[] = $row;
+		}
+
+		$output = array(
+			"draw" => $_POST['draw'],
+			"recordsTotal" => $this->control->count_all(),
+			"recordsFiltered" => $this->control->count_filtered(),
+			"data" => $data,
+		);
+		//output to json format
+		echo json_encode($output);
 	}
 
 

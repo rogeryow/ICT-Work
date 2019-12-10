@@ -166,8 +166,8 @@ class ControlModel extends CI_Model {
 		);
 	}
 
-	public function get_result($table = ""){
-		return $this->db->from($table)->get()->result();
+	public function get_json_result($table = ""){
+		echo json_encode($this->db->from($table)->get()->result());
 	}
 
 	public function test(){
