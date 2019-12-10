@@ -29,5 +29,4 @@ function createScriptTag(file){
 	scriptTag.async = false
 	scriptTag.src = file
 	body.prepend(scriptTag)
-	console.log('it works')
 }

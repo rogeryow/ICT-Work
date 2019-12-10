@@ -1,19 +1,19 @@
 import { loadCSS,loadScript,getPath } from './library.js'
 
 const control = {
-		styleFiles: [
-			`${getPath.path}assets/bootstrap/css/bootstrap.min.css`,
-			`${getPath.path}assets/datatables/css/dataTables.bootstrap.css`,
-			`${getPath.path}assets/bootstrap-datepicker/css/bootstrap-datepicker3.min.css`
-		],
 
-		scriptFiles: [
-			`${getPath.path}assets/jquery/jquery-2.1.4.min.js`,
-			`${getPath.path}assets/bootstrap/js/bootstrap.min.js`,
-			`${getPath.path}assets/datatables/js/jquery.dataTables.min.js`,
-			`${getPath.path}assets/datatables/js/dataTables.bootstrap.js`,
-			`${getPath.path}assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js`
-		],
+	styleFiles: [
+		`${getPath.path}assets/bootstrap/css/bootstrap.min.css`,
+		`${getPath.path}assets/datatables/css/dataTables.bootstrap.css`,
+		`${getPath.path}assets/bootstrap-datepicker/css/bootstrap-datepicker3.min.css`
+	],
+	scriptFiles: [
+		`${getPath.path}assets/jquery/jquery-2.1.4.min.js`,
+		`${getPath.path}assets/bootstrap/js/bootstrap.min.js`,
+		`${getPath.path}assets/datatables/js/jquery.dataTables.min.js`,
+		`${getPath.path}assets/datatables/js/dataTables.bootstrap.js`,
+		`${getPath.path}assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js`
+	],
 	
 	init: function(){
 		loadCSS(control.styleFiles)
@@ -21,54 +21,58 @@ const control = {
 	},
 
 	afterInit: function(){
-		// dataTableFunc()	
-		let url = `${getPath.path}control/getTableUsers`
-		let tablea = ''
-		let tableId = '#table'
-		tablea = new dataTable(url,table,tableId)
+
+		const url = `${getPath.path}control/getTableUsers`
+		var tableJFC = ''
+		const tableId = '#table'
+
+		tableJFC = new dataTable(url,table,tableId)
+		tableJFC.start()
+
+		console.log(tableJFC.table)
+
 	}
 
 }
 
-// function dataTableFunc(){
-// 	let table = document.querySelector("#table")
-// 	const url = `${getPath.path}control/getTableUsers`
-// 	console.log(url)
-
-// 	table = $('#table').dataTable({
-// 		"bLengthChange": false,
-//         "bFilter": false,
-//         "bDestroy": true,
-//         "processing": true, 
-//         "serverSide": true, 
-
-//         "ajax": {
-//             "url": url,
-//             "type": "POST",
-//         },
-// 	})
-// }
-
 class dataTable{
-	constructor(url,table,tableId) {
-		this.url = url
-		this.table = table
-		this.tableId = tableId
+	table = ''
+	tableId = ''
+	url = ''
+	options = {}
 
-		this.table = $(tableId).dataTable({
+	default = {
 		"bLengthChange": false,
         "bFilter": false,
         "bDestroy": true,
         "processing": true, 
         "serverSide": true, 
-
-        "ajax": {
-            "url": this.url,
-            "type": "POST",
-        },
-	})
 	}
 
+	ajax = {
+		"ajax": {
+	        "url": ``,
+	        "type": "POST",
+    	}
+	}
+
+	constructor(url,table,tableId) {
+		this.url = url
+		this.table = table
+		this.tableId = tableId
+	}
+
+	start() {
+		this.ajax.ajax.url = this.url
+		this.options = Object.assign(this.default, this.ajax)
+		this.table = $(this.tableId).dataTable(this.options)
+	}
+
+	refresh() {
+		this.table.fnClearTable()
+		this.table.fnDraw()
+		console.log('refreshed Done')
+	}
 
 }
 
