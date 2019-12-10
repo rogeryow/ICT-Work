@@ -21,17 +21,41 @@ const control = {
 	},
 
 	afterInit: function(){
-			dataTable()	
+		// dataTableFunc()	
+		let url = `${getPath.path}control/getTableUsers`
+		let tablea = ''
+		let tableId = '#table'
+		tablea = new dataTable(url,table,tableId)
 	}
 
 }
 
-function dataTable(){
-	let table = document.querySelector("#table")
-	const url = `${getPath.path}control/getTableUsers`
-	console.log(url)
+// function dataTableFunc(){
+// 	let table = document.querySelector("#table")
+// 	const url = `${getPath.path}control/getTableUsers`
+// 	console.log(url)
 
-	table = $('#table').dataTable({
+// 	table = $('#table').dataTable({
+// 		"bLengthChange": false,
+//         "bFilter": false,
+//         "bDestroy": true,
+//         "processing": true, 
+//         "serverSide": true, 
+
+//         "ajax": {
+//             "url": url,
+//             "type": "POST",
+//         },
+// 	})
+// }
+
+class dataTable{
+	constructor(url,table,tableId) {
+		this.url = url
+		this.table = table
+		this.tableId = tableId
+
+		this.table = $(tableId).dataTable({
 		"bLengthChange": false,
         "bFilter": false,
         "bDestroy": true,
@@ -39,10 +63,13 @@ function dataTable(){
         "serverSide": true, 
 
         "ajax": {
-            "url": url,
+            "url": this.url,
             "type": "POST",
         },
 	})
+	}
+
+
 }
 
 document.addEventListener('DOMContentLoaded', control.init)
