@@ -7,25 +7,11 @@
     <title>JFC</title>
 <body>
 
-    
     <div class="container">
         <h2>JFC</h2>
-        <table id="table" class="table table-striped table-hover" cellspacing="0" width="100%">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Contact</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <table id="table" class="table table-striped table-hover" width="100%"></table>
     </div>
 
     <script type="module" src="<?php echo base_url('assets/js/JFC.js')?>"></script>
-
-    <script type="text/javascript"></script>
 </body>
 </html>

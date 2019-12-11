@@ -1,4 +1,5 @@
 import { loadCSS,loadScript,getPath } from './library.js'
+import { dataTable } from './dataTable.js'
 
 const control = {
 
@@ -21,57 +22,17 @@ const control = {
 	},
 
 	afterInit: function(){
-
-		const url = `${getPath.path}control/getTableUsers`
-		var tableJFC = ''
-		const tableId = '#table'
-
-		tableJFC = new dataTable(url,table,tableId)
+		const tableJFC = new dataTable(table,'#table',`${getPath.path}control/getTableUsers`)		
+		const cols = [
+			['ID', 'id', '10%'],
+			['Name','surname','30%'],
+			['Gender','gender','25%'], 
+			['Contact','contact',''], 
+		]
+		tableJFC.setColumns(cols)
 		tableJFC.start()
 
-		console.log(tableJFC.table)
-
-	}
-
-}
-
-class dataTable{
-	table = ''
-	tableId = ''
-	url = ''
-	options = {}
-
-	default = {
-		"bLengthChange": false,
-        "bFilter": false,
-        "bDestroy": true,
-        "processing": true, 
-        "serverSide": true, 
-	}
-
-	ajax = {
-		"ajax": {
-	        "url": ``,
-	        "type": "POST",
-    	}
-	}
-
-	constructor(url,table,tableId) {
-		this.url = url
-		this.table = table
-		this.tableId = tableId
-	}
-
-	start() {
-		this.ajax.ajax.url = this.url
-		this.options = Object.assign(this.default, this.ajax)
-		this.table = $(this.tableId).dataTable(this.options)
-	}
-
-	refresh() {
-		this.table.fnClearTable()
-		this.table.fnDraw()
-		console.log('refreshed Done')
+		console.log(tableJFC)
 	}
 
 }

@@ -27,17 +27,20 @@ class Control extends CI_Controller {
 
 		$list = $this->control->get_datatables();
 		$data = array();
-		$no = $_POST['start'];
+
+
 		foreach ($list as $val) {
+		$no = $_POST['start'];
 			$no++;
 			$row = array();
-			$row[] = $val->id;
-			$row[] = $val->surname;
-			$row[] = $val->gender;
-			$row[] = $val->contact;
+			$row[$cols[0]] = $val->id;
+			$row[$cols[1]] = $val->surname;
+			$row[$cols[2]] = $val->gender;
+			$row[$cols[3]] = $val->contact;
 
 			$data[] = $row;
 		}
+
 
 		$output = array(
 			"draw" => $_POST['draw'],
