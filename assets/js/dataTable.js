@@ -9,7 +9,7 @@ export class dataTable{
         'serverSide': true, 
 	}
 
-	serverSide = {
+	server = {
 		'ajax': {
 	        'url': '',
 	        'type': 'POST',
@@ -29,8 +29,8 @@ export class dataTable{
 	}
 
 	start() {
-		this.serverSide.ajax.url = this.url
-		this.options = Object.assign(this.default, this.serverSide, this.data)
+		this.server.ajax.url = this.url
+		this.options = Object.assign(this.default, this.server, this.data)
 		this.table = $(this.tableId).dataTable(this.options)
 	}
 

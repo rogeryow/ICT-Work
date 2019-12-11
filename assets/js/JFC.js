@@ -20,7 +20,7 @@ const control = {
 		loadCSS(control.styleFiles)
 		loadScript(control.scriptFiles)
 	},
-
+	
 	afterInit: function(){
 		const tableJFC = new dataTable(table,'#table',`${getPath.path}control/getTableUsers`)		
 		const cols = [
