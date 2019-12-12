@@ -21,9 +21,10 @@ class Control extends CI_Controller {
 
 	public function getTableUsers(){
 		$cols = array("id","surname","gender","contact");
-		$this->control->set_select($cols);
 		$this->control->set_table("users");
+		$this->control->set_select($cols);
 		$this->control->set_column_order($cols);
+		// $this->Control->set_order( array('gender' => 'desc') );
 
 		$list = $this->control->get_datatables();
 		$data = array();

@@ -30,4 +30,3 @@ function createScriptTag(file){
 	scriptTag.src = file
 	body.prepend(scriptTag)
 }
-
