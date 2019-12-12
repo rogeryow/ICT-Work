@@ -64,13 +64,15 @@ const control = {
 	},
 
 	tableLimit: function() {
-		if(table.getElementsByTagName('tbody')[0].childElementCount > 10){		
+		let numRows = table.getElementsByTagName('tbody')[0].childElementCount
+		if(numRows > 10){		
 			table.getElementsByTagName('tbody')[0].deleteRow(numRows - 1)			
 		}
 
 	}
 
 }
+
 
 document.addEventListener('DOMContentLoaded', control.init)
 window.onload = control.afterInit
