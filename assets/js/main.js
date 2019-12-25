@@ -1,79 +1,27 @@
-import { loadCSS,loadScript,getPath } from './library/library.js'
-import { dataTable } from './library/dataTable.js'
-import * as server from './library/server.js'
+import * as helper from './library/library.js'
+import * as x from './library/variables.js'
+import { DataTable } from './library/dataTable.js'
 
-const control = {
-	table: document.getElementById('table'),
-	styleFiles: [
-		`${getPath.path}assets/bootstrap/css/bootstrap.min.css`,
-		`${getPath.path}assets/datatables/css/dataTables.bootstrap.css`,
-		`${getPath.path}assets/bootstrap-datepicker/css/bootstrap-datepicker3.min.css`
-	],
-	scriptFiles: [
-		`${getPath.path}assets/jquery/jquery-2.1.4.min.js`,
-		`${getPath.path}assets/bootstrap/js/bootstrap.min.js`,
-		`${getPath.path}assets/datatables/js/jquery.dataTables.min.js`,
-		`${getPath.path}assets/datatables/js/dataTables.bootstrap.js`,
-		`${getPath.path}assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js`
-	],
-	
-	init: function(){
-		loadCSS(control.styleFiles)
-		loadScript(control.scriptFiles)
-	},
+function eventListeners() {
 
-	afterInit: function(){
-		const tableJFC = new dataTable(table,'#table',`${getPath.path}control/getTableUsers`)		
-		const cols = [
-			['ID', 'id', '10%'],
-			['Name','surname','30%'],
-			['Gender','gender','25%'], 
-			['Contact','contact',''], 
-		]
-		tableJFC.setColumns(cols)
-		tableJFC.start()
+	document.addEventListener('DOMContentLoaded', function() {
+		helper.loadCSS(x.styleFiles)
+		helper.loadScript(x.scriptFiles)
+	})
 
-		table.addEventListener('click', control.removeRow)
-		document.querySelector('#submit').addEventListener('click', (ev) =>{
-			ev.preventDefault()
-			control.addRow()
-			control.tableLimit()
+	window.addEventListener('load', function() {
+    	x.tableDisability.dataTable = new DataTable(x.tableDisability)
+		x.tableDisability.dataTable.createTable()
+		dataTableEvents()
+	})
+
+	function dataTableEvents() {
+		x.tableDisability.dataTable.this.table[0].tBodies[0]
+		.addEventListener('click', function(ev){
+			x.linkDisability.value = helper.getTableRow(ev)[0]
+			helper.getDataByField(x.linkDisability).then(data => console.log(data[0]))
 		})
-	},
-
-	getFormData: function() {
-		let name = document.querySelector('#name').value
-		let gender = document.querySelector('#gender').value
-		return [name,'','',gender]
-	},
-
-	viewRow: function() {
-		table.parentNode.childNodes[0].innerText
-	},
-	
-	addRow: function() {
-		let formData = control.getFormData()
-		let newRow   = table.insertRow(1);
-		formData.map((data, index) => {
-			newRow.insertCell(index).innerHTML = data;
-		})
-	},
-
-	removeRow: function() {
-		ev.target.parentNode.remove()
-	},
-
-	tableLimit: function() {
-		let numRows = table.getElementsByTagName('tbody')[0].childElementCount
-		if(numRows > 10){		
-			table.getElementsByTagName('tbody')[0].deleteRow(numRows - 1)			
-		}
-
 	}
-
 }
 
-
-document.addEventListener('DOMContentLoaded', control.init)
-window.onload = control.afterInit
-
+eventListeners()

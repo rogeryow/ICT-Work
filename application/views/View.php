@@ -8,23 +8,7 @@
 <body>
     <div class="container">
 
-        <h2>JFC</h2>
-
-        <div >
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name">
-                </div>
-                <div class="form-group">
-                    <label for="gender">Contact</label>
-                    <input type="text" class="form-control" id="gender">
-                </div>
-                <button id="submit" type="submit" class="btn btn-default">Submit</button>
-            </form>  
-        </div>
-
-        <br>
+        <h2>Disables</h2>
 
         <div class="row">
             <div class="col-sm-12">

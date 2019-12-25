@@ -15,6 +15,7 @@ class ControlModel extends CI_Model {
 	var $having = array();
 	var $group = array();
 
+
 	public function set_table($val){
 		$this->table = $val;
 	}
@@ -41,44 +42,44 @@ class ControlModel extends CI_Model {
 		$this->column_search = $val;
 	}
 
-	public function set_order($val){
+	public function set_order($val) {
 		$this->order = $val;
 	}
 
-	public function set_select($val){
+	public function set_select($val) {
 	    $this->db->select($val);
 	}
 
-	public function set_like($val){
+	public function set_like($val) {
 		$this->where = $val; 
 	}
 
-	public function get_like(){
-		return $this->db->or_like($this->where);
-	}
-
-	public function set_having($val){
+	public function set_having($val) {
 		$this->having = $val; 
 	}
 
-	public function get_having(){
+	public function set_group($val) {
+		$this->group = $val;
+	}
+ 
+	public function get_like() {
+		return $this->db->or_like($this->where);
+	}
+
+	public function get_having() {
 		return $this->db->having($this->having);
 	}
 
-	public function set_group($val){
-		$this->group = $val;
-	}
-
-	public function get_group(){
+	public function get_group() {
 		return $this->db->group_by($this->group);
 	}
 
-	public function __construct(){
+	public function __construct( ){
 		parent::__construct();
 		$this->load->database();
 	}
 
-	private function _get_datatables_query(){	
+	private function _get_datatables_query() {	
 		$this->get_having();
 		$this->get_like();
 		$this->get_table();
@@ -105,16 +106,16 @@ class ControlModel extends CI_Model {
 			$i++;
 		}
 		
-		if(isset($_POST['order'])){
+		if(isset($_POST['order'])) {
 			$this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
 		} 
-		else if(isset($this->order)){
+		else if(isset($this->order)) {
 			$order = $this->order;
 			$this->db->order_by(key($order), $order[key($order)]);
 		}
 	}
 
-	function get_datatables(){
+	function get_datatables() {
 		$this->_get_datatables_query();
 		if($_POST['length'] != -1)
 		$this->db->limit($_POST['length'], $_POST['start']);
@@ -122,13 +123,13 @@ class ControlModel extends CI_Model {
 		return $query->result();
 	}
 
-	function count_filtered(){
+	function count_filtered() {
 		$this->_get_datatables_query();
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
 
-	public function count_all(){
+	public function count_all() {
 		$this->db->from($this->table);
 		return $this->db->count_all_results();
 	}
@@ -140,23 +141,23 @@ class ControlModel extends CI_Model {
 		return $query->row();
 	}
 
-	public function save($table, $data){
+	public function save($table, $data) {
 		$this->db->insert($table, $data);
 		return $this->db->insert_id();
 	}
 
-	public function update($table, $data, $where){
+	public function update($table, $data, $where) {
 		$this->db->update($table, $data, $where);
 		return $this->db->affected_rows();
 	}
 
-	public function delete_by_id($table, $col, $id){
+	public function delete_by_id($table, $col, $id) {
 		$this->db->where($col, $id);
 		$this->db->delete($table);
 		return $this->db->affected_rows();
 	}
 
-	public function test_result($table = ""){
+	public function test_result($table = "") {
 		$query = $this->db->from($table)->get();
 
 		return array(
@@ -166,25 +167,10 @@ class ControlModel extends CI_Model {
 		);
 	}
 
-	public function get_json_result($table = ""){
-		echo json_encode($this->db->from($table)->get()->result());
-	}
-
-	public function test(){
-		$query = $this->db->select('
-			disability_list.person_id, 
-			(SELECT GROUP_CONCAT(disability_person_type.disability_type) as `disability` FROM disability_person_type where disability_person_type.person_id=disability_list.person_id group by disability_person_type.person_id) as `disability`,
-			(SELECT GROUP_CONCAT(disability_person_cause.disability_cause) as `cause` FROM disability_person_cause where disability_person_cause.person_id=disability_list.person_id group by disability_person_cause.person_id) as `cause`
-			')
-         ->from('disability_list')
-         ->join('disability_person_cause', 'disability_list.person_id = disability_person_cause.person_id')
-         ->group_by('disability_list.person_id')
-         ->get();
-
-		return array(
-		    'result' => $query->result(),
-		    'query' => $this->db->last_query(),
-		);
+	public function getDataByID($table, $col, $id) {
+		$this->db->where($col, $id);
+		$result = $this->db->from($table)->get()->result();
+		echo json_encode($result);
 	}
 
 }
