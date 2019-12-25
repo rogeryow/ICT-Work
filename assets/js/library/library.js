@@ -65,5 +65,3 @@ export function getTableRow(ev) {
 	})
 	return rowData
 }
-
-export const sample = 'nice'
