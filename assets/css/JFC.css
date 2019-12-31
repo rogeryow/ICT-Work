@@ -1,3 +1,42 @@
-.hidden{
+
+body{
+	background-color: #F6F6F6;
+}
+
+.hidden {
 	display: hidden;
+}
+
+.borderRadDef {
+	border-radius: 10px;
+}
+
+#tableDisability_paginate {
+	display: block;
+	float: left;
+}
+
+#tableDisability td {
+	padding: 7px 0;
+}
+
+#searchDisability {
+	width: 70%;
+}
+
+.paper {
+	background-color: #FFFFFF;
+	height: 500px;
+}
+
+.paper-header {
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: 300;
+	padding: 10px 12px;
+	border-bottom: 1px solid #F5F5F5;
+}
+
+.paper-body {
+	padding: 10px 12px;
 }

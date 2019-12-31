@@ -5,6 +5,7 @@ export const getPath = {
 	.substring( 0, window.location.pathname.lastIndexOf( "/" ) + 1),
 }
 
+
 export function loadCSS(url){
 	const urlSet = new Set(url)
 	urlSet.forEach((link) => {
@@ -16,12 +17,14 @@ export function loadCSS(url){
 		head.appendChild(styleTag)
    })
 }
+
 	
 export async function loadScript(files){
 	for(const file of files) {
 		await createScriptTag(file)
 	}
 }
+
 
 function createScriptTag(file){
 	const body = document.querySelector('body')
@@ -32,10 +35,12 @@ function createScriptTag(file){
 	body.prepend(scriptTag)
 }
 
+
 export function getDataByField(data) {
 	const url = `${data.url}/${data.table}/${data.field}/${data.value}`
 	return XMLRequest(url)
 }
+
 
 function XMLRequest(test = '') {
 	return new Promise(function(resolve, reject) {
@@ -58,10 +63,20 @@ function XMLRequest(test = '') {
 	})	
 }
 
+
 export function getTableRow(ev) {
 	const rowData = []
 	Array.from(ev.target.parentNode.getElementsByTagName('td')).map((element) => {
 		rowData.push(element.textContent)
 	})
 	return rowData
+}
+
+
+export function delay(callback, ms) {
+	let timer
+	return function(...args) {
+		clearTimeout(timer)
+		timer = setTimeout(callback.bind(this, ...args), ms)
+	}
 }

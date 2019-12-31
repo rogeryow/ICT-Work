@@ -63,7 +63,7 @@ class ControlModel extends CI_Model {
 	}
  
 	public function get_like() {
-		return $this->db->or_like($this->where);
+		return $this->db->like($this->where);
 	}
 
 	public function get_having() {

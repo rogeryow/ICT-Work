@@ -1,44 +1,40 @@
 export class DataTable{
-	options = {}
+	options = {
 
-	defaultOptions = {
-		'bLengthChange': false,
-        'bFilter': false,
-        'bDestroy': true,
-        'processing': true, 
-        'serverSide': true, 
-        "order": [],
+		bLengthChange: false,
+        bFilter: false,
+        bDestroy: true,
+        bProcessing: true, 
+        bServerSide: true, 
+		bRetrieve: true,
+        order: [],
+    	columns: [],
+
+		ajax: {
+	        url: '',
+	        type: 'POST',
+	        data: {} 
+    	},
+
+		dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" + 
+			 "<'row'<'col-sm-12'tr>>" + 
+			 "<'row'<'col-sm-5'i><'col-sm-7'p>>", 
+
 	}
 
-	server = {
-		'ajax': {
-	        'url': '',
-	        'type': 'POST',
-    	}
+
+	constructor(data) {
+		this.tableID = data.tableId
+		this.options.ajax.url = data.dataUrl
+		this.options.columns = data.columns
 	}
 
-	data = {
-		columns: []
-	}
-
-	constructor(tableData) {
-		this.this = this
-		this.tableID = tableData.tableID
-		this.server.ajax.url = tableData.dataUrl
-		this.data.columns = tableData.columns
-	}
 
 	createTable() {
-		this.options = Object.assign(
-			this.defaultOptions, 
-			this.server, 
-			this.data,
-		)
 		this.table = $(this.tableID).dataTable(this.options)
 	}
 
 	refresh() {
-		this.table.fnClearTable()
 		this.table.fnDraw()
 	}
 

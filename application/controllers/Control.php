@@ -23,6 +23,12 @@ class Control extends CI_Controller {
 		$this->control->set_select($cols);
 		$this->control->set_column_order($cols);
 		$this->control->set_order( array('id' => 'desc') );
+		
+		$name = $this->input->post('name');
+
+		if($name != "") {
+			$this->control->set_like(array( "name"=> $name));
+		}
 
 		$list = $this->control->get_datatables();
 		$data = array();
