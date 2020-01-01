@@ -37,7 +37,7 @@ const tableDisability = {
 			className: 'hidden',
 		},
 		{
-			title: 'Name',
+			title: 'Recently Added',
 			data:  'name',
 			width: '90%',	
 		},

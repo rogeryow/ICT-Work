@@ -16,7 +16,7 @@ body{
 	float: left;
 }
 
-#tableDisability td {
+#tableDisability td, #tableDisability th  {
 	padding: 7px 0;
 }
 
@@ -26,17 +26,35 @@ body{
 
 .paper {
 	background-color: #FFFFFF;
-	height: 500px;
+	height: 650px;
 }
 
 .paper-header {
 	font-size: 16px;
 	text-transform: uppercase;
 	font-weight: 300;
-	padding: 10px 12px;
+	padding: 10px 20px;
 	border-bottom: 1px solid #F5F5F5;
 }
 
 .paper-body {
-	padding: 10px 12px;
+	padding: 10px 20px;
+}
+
+.paper-info {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.paper-title {
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.paper-row {
+	margin-bottom: 10px;
+}
+
+.paper-list li {
+	padding: 2px 0;
 }

@@ -23,8 +23,60 @@
                 <div class="paper">
                     <div class="paper-header">Profile</div>
                     <div class="paper-body">
-                        something something
+                        <div class="paper-info">
+                            <div class="row paper-row">
+                                <div class="col-sm-2 paper-title">Name</div>
+                                <div class="col-sm-4">Roger Pantil</div>
+                                <div class="col-sm-2 paper-title">Birth Date</div>
+                                <div class="col-sm-4">05/09/1994</div>
+                            </div>
+
+                            <div class="row paper-row">
+                                <div class="col-sm-2 paper-title">Address</div>
+                                <div class="col-sm-4">1343 Roxas Ext.</div>
+                                <div class="col-sm-2 paper-title">Phone</div>
+                                <div class="col-sm-4">09193952211</div>
+                            </div>
+
+                            <div class="row paper-row">
+                                <div class="col-sm-2 paper-title">Barangay</div>
+                                <div class="col-sm-4">Digos City zone 2</div>
+                                <div class="col-sm-2 paper-title">City</div>
+                                <div class="col-sm-4">Davao Del Sur</div>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="paper-header">Disability</div>
+                    <div class="paper-body">
+                        <div class="paper-info">
+                            <div class="row paper-row">
+                                <div class="col-sm-6 paper-title">Types</div>
+                                <div class="col-sm-6 paper-title">Causes</div>
+                            </div>
+                            <div class="row paper-row">
+                                <div class="col-sm-6">
+                                    <ul class="paper-list">
+                                        <li>unde omnis iste natus</li>
+                                        <li>inventore veritatis et quasi</li>
+                                        <li>ipsum quia dolor sit amet</li>
+                                        <li>molestiae consequatur</li>
+                                        <li>illum qui dolorem</li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-6">
+                                    <ul class="paper-list">
+                                        <li>eius modi tempora</li>
+                                        <li>voluptas sit</li>
+                                        <li>numquam eius</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="paper-header">Assistance</div>
+
                 </div>
             </div>
         </div>
