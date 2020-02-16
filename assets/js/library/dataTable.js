@@ -1,6 +1,5 @@
 export class DataTable{
-	options = {
-
+	option = {
 		bLengthChange: false,
         bFilter: false,
         bDestroy: true,
@@ -13,28 +12,28 @@ export class DataTable{
 		ajax: {
 	        url: '',
 	        type: 'POST',
-	        data: {} 
+	        data: {}, 
     	},
 
 		dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" + 
 			 "<'row'<'col-sm-12'tr>>" + 
 			 "<'row'<'col-sm-5'i><'col-sm-7'p>>", 
-
 	}
 
+	constructor(option) {
+		this.id = option.id 
+		this.option.ajax.url = option.ajax.url
+		this.option.ajax.data = option.ajax.data || ''
+		this.option.columns = option.columns
 
-	constructor(data) {
-		this.tableID = data.tableId
-		this.options.ajax.url = data.dataUrl
-		this.options.columns = data.columns
 	}
-
 
 	createTable() {
-		this.table = $(this.tableID).dataTable(this.options)
+		this.table = $(this.id).dataTable(this.option)
 	}
 
 	refresh() {
+		console.log('nice')
 		this.table.fnDraw()
 	}
 

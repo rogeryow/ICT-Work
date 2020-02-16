@@ -5,7 +5,6 @@ export const styleFiles = [
 	`${getPath.path}assets/bootstrap/css/bootstrap.min.css`,
 	`${getPath.path}assets/datatables/css/dataTables.bootstrap.css`,
 	`${getPath.path}assets/bootstrap-datepicker/css/bootstrap-datepicker3.min.css`,
-	`${getPath.path}assets/css/JFC.css`,
 ]
 
 

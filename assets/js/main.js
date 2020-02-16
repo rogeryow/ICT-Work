@@ -2,6 +2,7 @@ import * as helper from './library/library.js'
 import * as vars from './library/variables.js'
 import { DataTable } from './library/dataTable.js'
 
+
 function eventListeners() {
 
 	document.addEventListener('DOMContentLoaded', function() {
@@ -10,9 +11,14 @@ function eventListeners() {
 	})
 
 	window.addEventListener('load', function() {
-    	tableDisability.init()
-		tableDisability.events()
-		tableDisability.search()
+		const table = new dataTable(option)
+		table.createTable()
+		const get = document.getElementById('search').value
+		// table.bindData('name', get)
+		table.search()
+  //   	tables.disability.init()
+		// tables.disability.getRowData()
+		// this.search()
 	})
 
 }
@@ -26,55 +32,75 @@ const conns = {
 	}
 }
 
-const tableDisability = {
-	dataTable: null,
-	tableId: '#tableDisability',
-	dataUrl: `${helper.getPath.path}control/getTableUsers`,
+const option = {
+	id: '#demo',
+	ajax: {
+    	url: `${helper.getPath.path}control/getTableUsers`,
+    	data: function(data) {
+    		data['name'] = document.getElementById('search').value
+    	}
+	}, 
 	columns: [
-		{
-			title: 'ID',
-			data:  'id',
-			className: 'hidden',
-		},
-		{
-			title: 'Recently Added',
-			data:  'name',
-			width: '90%',	
-		},
+		{ title: 'ID', data:  'id', },
+		{ title: 'Name', data:  'name', width: '90%', },
 	],
+}
 
-	init: function() {
-		tableDisability.dataTable = new DataTable(tableDisability)
-		tableDisability.dataTable.options.dom = 
-		"<'row'<'col-sm-6'l><'col-sm-12'f>>" + 
-		"<'row'<'col-sm-12'tr>>" + 
-		"<'row'<'col-sm-12'p><'col-sm-12'i>>"
-		tableDisability.dataTable.options.ajax.data = function(data) {
-			data.name = document.getElementById('searchDisability').value
-		}
-		tableDisability.dataTable.createTable()
-	},
+class dataTable extends DataTable {
+	constructor() {
+		super(option)
+	}
 
-	events: function() {
-		const firstRow = 0
-		tableDisability.dataTable.table[firstRow].tBodies[firstRow]
-		.addEventListener('click', function(ev){
-			conns.disability.value = helper.getTableRow(ev)[firstRow]
-			helper.getDataByField(conns.disability).then((data) => {
-				console.log(data[0])
-			})
-		})
-	},
-
-	search: function() {
-		const delay = 1000
-		const search = helper.delay(() => tableDisability.dataTable.refresh() , delay)
-		document.getElementById('searchDisability').addEventListener('keyup', (ev) => {
-	  		search()
+	search() {
+		this.delay = 1000
+		this.search = helper.delay(() => this.refresh() , this.delay)
+		document.getElementById('search').addEventListener('keyup', (ev) => {
+	  		this.search()
 		}) 
-	},
+	}
 
 }
+
+
+// tables.disability = {
+// 	option: {
+// 		id: '#demo',
+// 		ajax: `${helper.getPath.path}control/getTableUsers`,
+// 		columns: [
+// 			{ title: 'ID', data:  'id', },
+// 			{ title: 'Name', data:  'name', width: '90%', },
+// 		],
+// 	},
+
+// 	init: function() {
+// 		this.dataTable = new DataTable(this.option)
+// 		this.dataTable.options.ajax.data = function(data) {
+// 			const searchValue = ''
+// 			// const eldocument.getElementById('searchDisability').value
+// 			data.name = searchValue
+// 		}
+// 		this.dataTable.createTable()
+// 	},
+
+// 	getRowData: function() {
+// 		this.dataTable.table[0].tBodies[0]
+// 		.addEventListener('click', function(ev){
+// 			conns.disability.value = helper.getTableRow(ev)[0]
+// 			helper.getDataByField(conns.disability).then((data) => {
+// 				console.log(data[0])
+// 			})
+// 		})
+// 	},
+
+// 	search: function() {
+// 		const delay = 1000
+// 		const search = helper.delay(() => this.dataTable.refresh() , delay)
+// 		document.getElementById('searchDisability').addEventListener('keyup', (ev) => {
+// 	  		search()
+// 		}) 
+// 	},
+
+// }
 
 
 eventListeners()
