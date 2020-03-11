@@ -11,17 +11,9 @@ function displayConvertedUnix() {
 }
 
 function displayUnixNowAndDate() {
-	let unixTime = getUnixTime()
-	let convertedUnixTime = convertUnixtimeToDate(unixTime)
+	let unixTime = getUnixTimeToday()
+	let convertedUnixTime = convertUnixToDate(unixTime)
 	addToList(`${unixTime} - ${convertedUnixTime}`, elListUnix)
-}
-
-function getUnixTime() {
-	return Math.round((new Date()).getTime() / 1000)
-}
-
-function convertUnixtimeToDate(unixTime) {
-	return new Date(unixTime * 1000)
 }
 
 function addToList(string, ul) {
@@ -31,7 +23,33 @@ function addToList(string, ul) {
 	ul.scrollIntoView(false)
 	ul.scrollTop = ul.scrollHeight
 }
-	
+const schedule = {
+	morningInA: '5:00', 
+	morningInB: '11:59',
+	morningOutA: '12:00',
+	morningOutB: '12:30',
+}
+
+console.log(getDateToday())
+console.log(convertDateToUnix(getDateToday()))
+
+function getUnixTimeToday() {
+	return Math.round((new Date()).getTime() / 1000)
+}
+
+function convertDateToUnix(date) {
+	return Math.round(new Date(date).getTime() / 1000)
+}
+
+function convertUnixToDate(unixTime) {
+	return new Date(unixTime * 1000)
+}
+
+
+function getDateToday() {
+	return new Date().toJSON().slice(0,10).replace(/-/g,'.');
+}
+
 /*
 	- Normal Schedule
 	morning-in:    5:00 - 11:59 
@@ -49,4 +67,17 @@ function addToList(string, ul) {
 /*
 	- undertime: 
 	afternoon (11:30) if only first  
+*/
+
+/*
+convertUnixToDate(1583736118 *1000)
+Sat Aug 07 52156 11:26:40 GMT+0800 (Singapore Standard Time)
+new Date('2012.08.10').getTime() / 1000
+1344528000
+convertUnixToDate(1344528000)
+Fri Aug 10 2012 00:00:00 GMT+0800 (Singapore Standard Time)
+new Date('2012.08.10 13:39:44').getTime() / 1000
+1344577184
+convertUnixToDate(1344577184)
+Fri Aug 10 2012 13:39:44 GMT+0800 (Singapore Standard Time)
 */
