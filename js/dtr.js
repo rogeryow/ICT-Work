@@ -31,10 +31,22 @@ function addToList(string, ul) {
 	ul.scrollIntoView(false)
 	ul.scrollTop = ul.scrollHeight
 }
-
+	
+/*
+	- Normal Schedule
+	morning-in:    5:00 - 11:59 
+	morning-out:   12:00 - 12:30
+	afternoon-in:  12:31 - 4:59
+	afternoon-out: 5:00+ 
+*/
 
 /*
-	morning-in: 5:00 - 8:00, late: 8:01 - 10:00 
-	morning-out:
+	- late
+	morning-in: 8:01+
+	afternoon late: 1:01+ 
+*/
 
+/*
+	- undertime: 
+	afternoon (11:30) if only first  
 */
