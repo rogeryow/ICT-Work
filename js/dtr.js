@@ -30,9 +30,6 @@ const schedule = {
 	morningOutB: '12:30',
 }
 
-console.log(getDateToday())
-console.log(convertDateToUnix(getDateToday()))
-
 function getUnixTimeToday() {
 	return Math.round((new Date()).getTime() / 1000)
 }
@@ -45,10 +42,153 @@ function convertUnixToDate(unixTime) {
 	return new Date(unixTime * 1000)
 }
 
-
 function getDateToday() {
 	return new Date().toJSON().slice(0,10).replace(/-/g,'.');
 }
+
+const testB = [
+	['3/13/2020', '6:52'],
+	['3/13/2020', '6:59'],
+	['3/13/2020', '7:00'],
+	['3/13/2020', '7:52'],
+	['3/13/2020', '7:54'],
+	['3/13/2020', '7:55'],
+	['3/13/2020', '7:58'],
+	['3/13/2020', '8:05'],
+	['3/13/2020', '8:10'],
+	['3/13/2020', '11:10'],
+	['3/13/2020', '11:10'],
+	['3/13/2020', '11:29'],
+	['3/13/2020', '11:30'],
+	['3/13/2020', '12:00'],
+	['3/13/2020', '12:10'],
+	['3/13/2020', '12:30'],
+	['3/13/2020', '12:31'],
+	['3/13/2020', '13:00'],
+	['3/13/2020', '13:01'],
+	['3/13/2020', '16:59'],
+	['3/13/2020', '17:00'],
+	['3/13/2020', '17:30'],
+	['3/13/2020', '17:31'],
+]
+
+const testA = [
+	['2/3/2020', '7:42'],
+	['2/3/2020', '12:00'],
+	['2/3/2020', '12:46'],
+	['2/3/2020', '12:47'],
+	['2/3/2020', '17:00'],
+]
+
+const testSchedule = [
+	['morningIn', '8:00'],
+]
+
+function convertArrayToUnix(array) {
+	let arrayUnix = []
+	array.map((item) => {
+		let date = item[0]
+		let time = item[1]
+		arrayUnix.push([date, time, convertDateToUnix(`${date} ${time}`)])
+	})
+	return arrayUnix
+}
+
+function calculcateSchedule(userSched) {
+	let date = userSched[0][0]
+	const schedule = {
+		morningInA: '7:00',
+		morningInB: '9:00',
+		underTimeAnOutA: '11:30',
+		underTimeAnOutB: '11:59',
+		morningOutA: '12:00',
+		morningOutB: '12:30',
+		afternoonInA: '12:31',
+		afternoonInB: '13:00',
+		afternoonOutA: '17:00',
+		afternoonOutB: '17:30',
+	}
+
+	function getFromAndTo(schedule, {date, start, end}) {
+		let unixStart = convertDateToUnix(`${date} ${start}`)
+		let unixEnd = convertDateToUnix(`${date} ${end}`)
+		let unixArray = []
+		schedule.forEach((value) => {
+			unixTime = value[2]
+			if(unixTime >= unixStart && unixTime <= unixEnd) {
+				unixArray.push(unixTime)
+			}
+		})
+
+		return unixArray
+	}
+
+	function getMorningIn(unixArray) {
+		return Math.min(...unixArray)
+	}
+
+	function getMorningOut(unixArray) {
+		if(unixArray.length  > 0) {	
+			return Math.min(...unixArray)
+		} else {
+			let aftnoonUnderTimeSched = {
+				date: date,  
+				start: schedule.underTimeAnOutA, 
+				end: schedule.underTimeAnOutB,
+			}
+			let undertime = getFromAndTo(userSched, aftnoonUnderTimeSched)
+			if(undertime.length > 0) {
+				return Math.max(undertime)
+			} else {
+				return 
+			}
+		}
+	}
+
+	function getAfterNoonIn(unixArray) {
+		return Math.min(...unixArray)
+	}
+
+	function getAfterNoonOut(unixArray) {
+		return Math.max(...unixArray) 
+	}
+
+	let morningInSched = {
+		date: date,  
+		start: schedule.morningInA, 
+		end: schedule.morningInB
+	}
+	let morningIn = getMorningIn(getFromAndTo(userSched, morningInSched))
+
+	let morningOutSched = {
+		date: date,  
+		start: schedule.morningOutA, 
+		end: schedule.morningOutB,
+	}
+	let morningOut = getMorningOut(getFromAndTo(userSched, morningOutSched))
+
+	let aftnoonInSched = {
+		date: date,  
+		start: schedule.afternoonInA, 
+		end: schedule.afternoonInB,
+	}
+	let afternoonIn = getAfterNoonIn(getFromAndTo(userSched, aftnoonInSched))
+
+	let aftnoonOutSched = {
+		date: date,  
+		start: schedule.afternoonOutA, 
+		end: schedule.afternoonOutB,
+	}
+	let afternoonOut = getAfterNoonOut(getFromAndTo(userSched, aftnoonOutSched))
+
+	console.log('morning in: ' + convertUnixToDate(morningIn))
+	console.log('morning out: ' + convertUnixToDate(morningOut))
+	console.log('afternoon in: ' + convertUnixToDate(afternoonIn))
+	console.log('afternoon out: ' + convertUnixToDate(afternoonOut))
+}
+
+const schedTestA = convertArrayToUnix(testA)
+calculcateSchedule(schedTestA)
 
 /*
 	- Normal Schedule
