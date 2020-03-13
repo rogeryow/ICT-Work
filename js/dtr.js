@@ -73,11 +73,19 @@ const testB = [
 ]
 
 const testA = [
-	['2/3/2020', '7:42'],
+	// test one 
+	// ['2/3/2020', '7:42'],
+	// ['2/3/2020', '12:00'],
+	// ['2/3/2020', '12:46'],
+	// ['2/3/2020', '12:47'],
+	// ['2/3/2020', '17:00'],
+	// test two
+	// ['2/3/2020', '8:21'],
+	// ['2/3/2020', '17:02'],
+	['2/3/2020', '8:09'],
 	['2/3/2020', '12:00'],
-	['2/3/2020', '12:46'],
-	['2/3/2020', '12:47'],
-	['2/3/2020', '17:00'],
+	['2/3/2020', '13:09'],
+	['2/3/2020', '16:49'],
 ]
 
 const testSchedule = [
@@ -99,12 +107,16 @@ function calculcateSchedule(userSched) {
 	const schedule = {
 		morningInA: '7:00',
 		morningInB: '9:00',
-		underTimeAnOutA: '11:30',
-		underTimeAnOutB: '11:59',
+		underTimeMnOutA: '11:30',
+		underTimeMnOutB: '11:59',
 		morningOutA: '12:00',
 		morningOutB: '12:30',
 		afternoonInA: '12:31',
 		afternoonInB: '13:00',
+		afternoonInLateA: '13:01',
+		afternoonInLateB: '13:30',
+		underTimeAnOutA: '16:30',
+		underTimeAnOutB: '16:59',
 		afternoonOutA: '17:00',
 		afternoonOutB: '17:30',
 	}
@@ -133,8 +145,8 @@ function calculcateSchedule(userSched) {
 		} else {
 			let aftnoonUnderTimeSched = {
 				date: date,  
-				start: schedule.underTimeAnOutA, 
-				end: schedule.underTimeAnOutB,
+				start: schedule.underTimeMnOutA, 
+				end: schedule.underTimeMnOutB,
 			}
 			let undertime = getFromAndTo(userSched, aftnoonUnderTimeSched)
 			if(undertime.length > 0) {
@@ -146,10 +158,39 @@ function calculcateSchedule(userSched) {
 	}
 
 	function getAfterNoonIn(unixArray) {
-		return Math.min(...unixArray)
+		if(unixArray.length  > 0) {	
+			return Math.min(...unixArray)
+		} else {
+			let aftnoonLateTimeSched = {
+				date: date,  
+				start: schedule.afternoonInLateA, 
+				end: schedule.afternoonInLateB,
+			}
+			let late = getFromAndTo(userSched, aftnoonLateTimeSched)
+			if(late.length > 0) {
+				return Math.max(late)
+			} else {
+				return 
+			}
+		}
 	}
 
 	function getAfterNoonOut(unixArray) {
+		if(unixArray.length  > 0) {	
+			return Math.min(...unixArray)
+		} else {
+			let aftnoonUnderTimeSched = {
+				date: date,  
+				start: schedule.underTimeAnOutA, 
+				end: schedule.underTimeAnOutB,
+			}
+			let undertime = getFromAndTo(userSched, aftnoonUnderTimeSched)
+			if(undertime.length > 0) {
+				return Math.max(undertime)
+			} else {
+				return 
+			}
+		}
 		return Math.max(...unixArray) 
 	}
 
