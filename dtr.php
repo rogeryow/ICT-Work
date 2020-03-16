@@ -16,7 +16,7 @@
 		<ul class="list" id="elListConvert"></ul>
 	</div>
 
-	<script src="js/dtr.js" type="text/javascript"></script>
+	<script src="js/dtrUltima.js" type="text/javascript"></script>
 </body>
 </html>
 
