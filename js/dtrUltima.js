@@ -1,25 +1,35 @@
 const ONE_SEC_IN_MILISEC = 1000
+const ONE_MIN_IN_SEC =  60
 
 function getDateToday() {
 	return new Date().toJSON().slice(0,10).replace(/-/g,'.');
 }
 
-function getUnixToday() {
-	return Math.round((new Date()).getTime() / ONE_SEC_IN_MILISEC)
-}
-
 function convertDateToUnix(date) {
-	return Math.round(date.getTime() / ONE_SEC_IN_MILISEC)
+	date = (typeof date === 'undefined') ? new Date() : date
+	return formulaDateToUnix(date)
 }
 
 function convertUnixToDate(unix) {
+	unix = (typeof unix === 'undefined') ? formulaDateToUnix(new Date()) : unix
+	return formulaUnixToDate(unix)
+}
+
+function convertMinToUnix(mins) {
+	mins = (typeof mins === 'undefined') ? 0 : mins
+	return mins * ONE_MIN_IN_SEC
+}
+
+function formulaDateToUnix(date) {
+	return Math.round(date.getTime() / ONE_SEC_IN_MILISEC)
+}
+
+function formulaUnixToDate(unix) {
 	return new Date(unix * ONE_SEC_IN_MILISEC)
 }
 
-function convertMinToUnix(minutes) {
-	const ONE_MIN_IN_SEC =  60
-	return minutes * ONE_MIN_IN_SEC
-}
-
-console.log(convertUnixToDate(getUnixToday()))
-console.log(convertUnixToDate(getUnixToday() + convertMinToUnix(-60)))
+console.log(
+	convertUnixToDate(
+		convertDateToUnix() + convertMinToUnix()
+	)
+)
