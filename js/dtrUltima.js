@@ -11,24 +11,24 @@ const schedule = {
 const testSched = [
 	{
 		date: '3/16/2020',
-		time: [
-			'7:30',
-			'8:05',
-			'8:09',
-			'12:00',
-			'13:00',
-			'13:09',
-			'16:49',
+		record: [
+			{time: '7:30'},
+			{time: '8:05'},
+			{time: '8:09'},
+			{time: '12:00'},
+			{time: '13:00'},
+			{time: '13:09'},
+			{time: '16:49'},
 		]
 	},
 	{
 		date: '3/24/2020',
-		time: [
-			'7:30',
-			'8:15',
-			'8:10',
-			'12:01',
-			'13:35',
+		record: [
+			{time: '7:30'},
+			{time: '8:15'},
+			{time: '8:10'},
+			{time: '12:01'},
+			{time: '13:35'},
 		]
 	}
 ]
@@ -58,7 +58,17 @@ function formulaUnixToDate(unix) {
 
 
 function calcuateDTR(schedule, dtr) {
-	console.log(schedule)
+	for (const [index, value] of dtr.entries()) {
+		if(dtr[index].hasOwnProperty('record')) {
+
+			dtr[index]['record'].forEach((row, i) => {
+				if(row.hasOwnProperty('time')) {
+					dtr[index]['record'][i]['unix'] = 'nice'
+				} else return 
+			})
+
+		} else return 
+	}
 	console.log(dtr)
 }
 
