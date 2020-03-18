@@ -15,7 +15,9 @@ const userSched = [
 			{
 				date: '3/18/2020',
 				record:[
+					{time: '7:29'},
 					{time: '7:30'},
+					{time: '7:31'},
 					{time: '8:05'},
 					{time: '8:09'},
 					{time: '12:00'},
@@ -101,10 +103,32 @@ function pushUnixToDtr(userSched) {
 				value['unix'] = convertDateToUnix(new Date(timestamp))
 			}
 
+			filterSched({
+				records: value['record'],
+				date: date, 
+				duration: workSched.morningIn,
+			})
+
 		}
 
 	}
 }
 
+function filterSched({records, date, duration}) {
+	timeStart = duration[0]
+	timeEnd = duration[1]
+	unixStart = convertDateToUnix(new Date(`${date} ${timeStart}`))
+	unixEnd = convertDateToUnix(new Date(`${date} ${timeEnd}`))
+
+	console.log(date)
+	let record = records.entries()
+	for (const [index, value] of record) {
+		let unixTime = value['unix']
+		max = unixTime
+		if(unixTime >= unixStart && unixTime <= unixEnd) {
+				
+		}
+	}
+}
+
 pushUnixToDtr(userSched)
-console.log(userSched)
