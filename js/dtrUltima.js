@@ -21,6 +21,7 @@ const userSched = [
 					{time: '8:00'},
 					{time: '8:05'},
 					{time: '8:09'},
+					{time: '11:58'},
 					{time: '11:59'},
 					// {time: '12:00'},
 					{time: '13:00'},
@@ -52,6 +53,7 @@ const userSched = [
 					{time: '7:31'},
 					{time: '8:07'},
 					{time: '8:20'},
+					// {time: '11:30'},
 					{time: '12:30'},
 					{time: '13:01'},
 				]
@@ -121,7 +123,7 @@ function pushUnixToDtr(userSched) {
 				date: date, 
 				duration: workSched.morningOut,
 				option: 'min',
-				underTime: '30',
+				underTime: '-30',
 			})
 
 			console.log('morning in: ' + convertUnixToDate(morningIn))
@@ -132,14 +134,39 @@ function pushUnixToDtr(userSched) {
 	}
 }
 
-function calculateSched({records, date, duration, option}) {
-	timeStart = duration[0]
-	timeEnd = duration[1]
-	unixStart = convertDateToUnix(new Date(`${date} ${timeStart}`))
-	unixEnd = convertDateToUnix(new Date(`${date} ${timeEnd}`))
+function calculateSched({records, date, duration, option, underTime}) {
+	let timeStart = duration[0]
+	let timeEnd = duration[1]
+	let unixStart = convertDateToUnix(new Date(`${date} ${timeStart}`))
+	let unixEnd = convertDateToUnix(new Date(`${date} ${timeEnd}`))
 
-	const filtered = getBetweenAndUnixOnly(records)
+	let filtered = getBetweenAndUnixOnly(records)
 	let getFinalTime = getCalculatedTime(filtered) 	
+
+	function getBetweenAndUnixOnly(records) {
+		let filtered = []
+
+		filtered = filterStartToEnd({
+			start: unixStart,
+			end: unixEnd,
+		})
+
+		if(filtered.length === 0) {
+			if(underTime) {
+				option = 'max'
+				return filtered = filterStartToEnd({
+					start: unixStart += convertMinToUnix(underTime),
+					end: unixEnd += convertMinToUnix(underTime),
+				})
+			}
+		}else if(filtered.length > 0) return filtered
+			
+		function filterStartToEnd({start, end}) {
+			return  records.filter((record) => {
+				return record['unix'] >= start && record['unix'] <= end
+			}).map((value) => value['unix'])	
+		}		
+	}
 
 	function getCalculatedTime(filtered) {
 		if(filtered.length > 0) {
@@ -154,14 +181,18 @@ function calculateSched({records, date, duration, option}) {
 		} else return 0
 	}
 
-	function getBetweenAndUnixOnly(records) {
-		return records.filter((record) => {
-			return record['unix'] >= unixStart && record['unix'] <= unixEnd
-		}).map((value) => value['unix'])	
+	function checker(record) {
+		records.forEach((record) => {
+			if(record['unix'] == getFinalTime) {
+				record['check'] = true
+			}
+		})	
 	}
+	
 
-
+	checker(records)
 	return getFinalTime
 }
 
 pushUnixToDtr(userSched)
+console.log(userSched)
