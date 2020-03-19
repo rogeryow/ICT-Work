@@ -2,7 +2,7 @@ const ONE_SEC_IN_MILISEC = 1000
 const ONE_MIN_IN_SEC =  60
 
 const workSched = {
-	morningIn:    ['7:00', '8:00'],
+	morningIn:    ['7:00', '9:00'],
 	morningOut:   ['12:00', '12:30'],
 	afternoonIn:  ['12:31', '13:00'],
 	afternoonOut: ['17:00', '17:30'],
@@ -18,18 +18,22 @@ const userSched = [
 					{time: '7:29'},
 					{time: '7:30'},
 					{time: '7:31'},
+					{time: '8:00'},
 					{time: '8:05'},
 					{time: '8:09'},
-					{time: '12:00'},
+					{time: '11:59'},
+					// {time: '12:00'},
 					{time: '13:00'},
 					{time: '13:09'},
 					{time: '16:49'},
 				]
 			},
 			{
-				date: '3/25/2020',
+				date: '3/19/2020',
 				record: [
 					{time: '7:30'},
+					{time: '7:31'},
+					{time: '8:00'},
 					{time: '8:15'},
 					{time: '8:10'},
 					{time: '12:01'},
@@ -43,7 +47,7 @@ const userSched = [
 		ID: '102', dtr:
 		[ 
 			{
-				date: '3/16/2020',
+				date: '3/20/2020',
 				record:[
 					{time: '7:31'},
 					{time: '8:07'},
@@ -53,10 +57,12 @@ const userSched = [
 				]
 			},
 			{
-				date: '3/24/2020',
+				date: '3/21/2020',
 				record: [
 					{time: '7:30'},
+					{time: '7:31'},
 					{time: '8:15'},
+					{time: '8:16'},
 					{time: '8:10'},
 					{time: '12:21'},
 					{time: '13:45'},
@@ -103,32 +109,59 @@ function pushUnixToDtr(userSched) {
 				value['unix'] = convertDateToUnix(new Date(timestamp))
 			}
 
-			filterSched({
+			const morningIn = calculateSched({
 				records: value['record'],
 				date: date, 
 				duration: workSched.morningIn,
+				option: 'min',
+			})
+			
+			const morningOut = calculateSched({
+				records: value['record'],
+				date: date, 
+				duration: workSched.morningOut,
+				option: 'min',
+				underTime: '30',
 			})
 
+			console.log('morning in: ' + convertUnixToDate(morningIn))
+			console.log('morning out: ' + convertUnixToDate(morningOut))
+			console.log('')
 		}
 
 	}
 }
 
-function filterSched({records, date, duration}) {
+function calculateSched({records, date, duration, option}) {
 	timeStart = duration[0]
 	timeEnd = duration[1]
 	unixStart = convertDateToUnix(new Date(`${date} ${timeStart}`))
 	unixEnd = convertDateToUnix(new Date(`${date} ${timeEnd}`))
 
-	console.log(date)
-	let record = records.entries()
-	for (const [index, value] of record) {
-		let unixTime = value['unix']
-		max = unixTime
-		if(unixTime >= unixStart && unixTime <= unixEnd) {
-				
-		}
+	const filtered = getBetweenAndUnixOnly(records)
+	let getFinalTime = getCalculatedTime(filtered) 	
+
+	function getCalculatedTime(filtered) {
+		if(filtered.length > 0) {
+			switch(option) {
+				case 'min':
+					return Math.min(...filtered)
+				break
+				case 'max':
+					return Math.max(...filtered)
+				break
+			}
+		} else return 0
 	}
+
+	function getBetweenAndUnixOnly(records) {
+		return records.filter((record) => {
+			return record['unix'] >= unixStart && record['unix'] <= unixEnd
+		}).map((value) => value['unix'])	
+	}
+
+
+	return getFinalTime
 }
 
 pushUnixToDtr(userSched)
