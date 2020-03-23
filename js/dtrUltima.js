@@ -115,7 +115,9 @@ function pushUnixToDtr(userSched) {
 				let timestamp = `${date} ${value['time']}`
 				value['unix'] = convertDateToUnix(new Date(timestamp))
 			}
+
 			console.log(date)
+			
 			const morningIn = calculateSched({
 				records: value['record'],
 				date: date, 
