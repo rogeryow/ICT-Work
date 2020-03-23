@@ -74,6 +74,18 @@ const userSched = [
 					{time: '13:45'},
 					{time: '17:00'},
 				]
+			},
+			{
+				date: '3/23/2020',
+				record: [
+					{time: '7:30'},
+					{time: '7:31'},
+					{time: '8:15'},
+					{time: '8:16'},
+					{time: '8:10'},
+					{time: '12:21'},
+					{time: '13:45'},
+				]
 			}
 		]
 	},
@@ -117,45 +129,47 @@ function pushUnixToDtr(userSched) {
 			}
 
 			console.log(date)
-			
-			const morningIn = calculateSched({
-				records: value['record'],
-				date: date, 
-				duration: workSched.morningIn,
-				option: 'min',
-			})
+
+			// const morningIn = calculateSched({
+			// 	records: value['record'],
+			// 	date: date, 
+			// 	duration: workSched.morningIn,
+			// 	option: 'min',
+			// })
 			
 			const morningOut = calculateSched({
 				records: value['record'],
 				date: date, 
-				duration: workSched.morningOut,
-				option: 'min',
-				other: [
+				// duration: workSched.morningOut,
+				// option: 'min',
+				duration: [
+					{duration: workSched.morningOut, option: 'max'},
 					{duration: ['11:30', '12:00'], option: 'max'},
 				],
 			})
 
-			const afternoonIn = calculateSched({
-				records: value['record'],
-				date: date, 
-				duration: workSched.afternoonIn,
-				option: 'min',
-			})
+			// const afternoonIn = calculateSched({
+			// 	records: value['record'],
+			// 	date: date, 
+			// 	duration: workSched.afternoonIn,
+			// 	option: 'min',
+			// })
 
 			const afternoonOut = calculateSched({
 				records: value['record'],
 				date: date, 
-				duration: workSched.afternoonOut,
-				option: 'max',
-				other: [
+				// duration: workSched.afternoonOut,
+				// option: 'max',
+				duration: [
 					{duration: ['16:00', '16:30'], option: 'max'},
 					{duration: ['16:30', '17:00'], option: 'max'},
+					{duration: ['13:01', '17:00'], option: 'max'},
 				],
 			})
 
-			console.log('morning in: ' + convertUnixToDate(morningIn))
+			// console.log('morning in: ' + convertUnixToDate(morningIn))
 			console.log('morning out: ' + convertUnixToDate(morningOut))
-			console.log('afternoon In: ' + convertUnixToDate(afternoonIn))
+			// console.log('afternoon In: ' + convertUnixToDate(afternoonIn))
 			console.log('afternoon Out: ' + convertUnixToDate(afternoonOut))
 			console.log('')
 		}
@@ -164,10 +178,10 @@ function pushUnixToDtr(userSched) {
 }
 
 function calculateSched({records, date, duration, option, other}) {
-	let timeStart = duration[0]
-	let timeEnd = duration[1]
-	let unixStart = convertDateToUnix(new Date(`${date} ${timeStart}`))
-	let unixEnd = convertDateToUnix(new Date(`${date} ${timeEnd}`))
+	// let timeStart = duration[0]
+	// let timeEnd = duration[1]
+	// let unixStart = convertDateToUnix(new Date(`${date} ${timeStart}`))
+	// let unixEnd = convertDateToUnix(new Date(`${date} ${timeEnd}`))
 
 	let filtered = getBetweenAndUnixOnly(records)
 	let getFinalTime = getCalculatedTime(filtered) 	
@@ -176,14 +190,14 @@ function calculateSched({records, date, duration, option, other}) {
 	function getBetweenAndUnixOnly(records) {
 		let filtered = []
 
-		filtered = filterStartToEnd({
-			start: unixStart,
-			end: unixEnd,
-		})
+		// filtered = filterStartToEnd({
+		// 	start: unixStart,
+		// 	end: unixEnd,
+		// })
 
-		if(filtered.length === 0) {
-			if(other) {
-				let otherEntries = other.entries()
+		// if(filtered.length === 0) {
+			if(duration) {
+				let otherEntries = duration.entries()
 				for (const [index, value] of otherEntries) {
 					option = value['option']
 					dateStart = value['duration'][0]
@@ -200,7 +214,7 @@ function calculateSched({records, date, duration, option, other}) {
 					}
 				}
 			}
-		}else if(filtered.length > 0) return filtered
+		// }else if(filtered.length > 0) return filtered
 			
 		function filterStartToEnd({start, end}) {
 			return  records.filter((record) => {
