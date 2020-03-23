@@ -40,6 +40,7 @@ const userSched = [
 					{time: '8:10'},
 					{time: '12:01'},
 					{time: '13:35'},
+					{time: '16:59'},
 				]
 			}
 		]
@@ -114,11 +115,12 @@ function pushUnixToDtr(userSched) {
 				let timestamp = `${date} ${value['time']}`
 				value['unix'] = convertDateToUnix(new Date(timestamp))
 			}
-
+			console.log(date)
 			const morningIn = calculateSched({
 				records: value['record'],
 				date: date, 
 				duration: workSched.morningIn,
+				option: 'min',
 			})
 			
 			const morningOut = calculateSched({
@@ -126,6 +128,9 @@ function pushUnixToDtr(userSched) {
 				date: date, 
 				duration: workSched.morningOut,
 				option: 'min',
+				other: [
+					{duration: ['11:30', '12:00'], option: 'max'},
+				],
 			})
 
 			const afternoonIn = calculateSched({
@@ -133,11 +138,6 @@ function pushUnixToDtr(userSched) {
 				date: date, 
 				duration: workSched.afternoonIn,
 				option: 'min',
-				other: [
-					{duration: ['12:00', '12:05'], option: 'max'},
-					{duration: ['12:10', '12:15'], option: 'min'},
-					{duration: ['12:20', '12:30'], option: 'max'},
-				],
 			})
 
 			const afternoonOut = calculateSched({
@@ -145,6 +145,10 @@ function pushUnixToDtr(userSched) {
 				date: date, 
 				duration: workSched.afternoonOut,
 				option: 'max',
+				other: [
+					{duration: ['16:00', '16:30'], option: 'max'},
+					{duration: ['16:30', '17:00'], option: 'max'},
+				],
 			})
 
 			console.log('morning in: ' + convertUnixToDate(morningIn))
@@ -165,6 +169,7 @@ function calculateSched({records, date, duration, option, other}) {
 
 	let filtered = getBetweenAndUnixOnly(records)
 	let getFinalTime = getCalculatedTime(filtered) 	
+	checker(records)
 
 	function getBetweenAndUnixOnly(records) {
 		let filtered = []
@@ -218,6 +223,7 @@ function calculateSched({records, date, duration, option, other}) {
 	}
 
 	function checker(record) {
+		// console.log(getFinalTime)
 		records.forEach((record) => {
 			if(record['unix'] == getFinalTime) {
 				record['check'] = true
@@ -225,7 +231,6 @@ function calculateSched({records, date, duration, option, other}) {
 		})	
 	}
 	
-	checker(records)
 	return getFinalTime
 }
 
