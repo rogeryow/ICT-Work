@@ -126,9 +126,10 @@ function pushUnixToDtr(userSched) {
 				underTime: '-30',
 			})
 
+			
+
 			console.log('morning in: ' + convertUnixToDate(morningIn))
 			console.log('morning out: ' + convertUnixToDate(morningOut))
-			console.log('')
 		}
 
 	}
