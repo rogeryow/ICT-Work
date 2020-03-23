@@ -23,7 +23,8 @@ const userSched = [
 					{time: '8:09'},
 					{time: '11:58'},
 					{time: '11:59'},
-					// {time: '12:00'},
+					{time: '12:00'},
+					{time: '12:00'},
 					{time: '13:00'},
 					{time: '13:09'},
 					{time: '16:49'},
@@ -54,7 +55,9 @@ const userSched = [
 					{time: '8:07'},
 					{time: '8:20'},
 					// {time: '11:30'},
+					{time: '12:00'},
 					{time: '12:30'},
+					{time: '12:35'},
 					{time: '13:01'},
 				]
 			},
@@ -68,6 +71,7 @@ const userSched = [
 					{time: '8:10'},
 					{time: '12:21'},
 					{time: '13:45'},
+					// {time: '17:00'},
 				]
 			}
 		]
@@ -115,7 +119,6 @@ function pushUnixToDtr(userSched) {
 				records: value['record'],
 				date: date, 
 				duration: workSched.morningIn,
-				option: 'min',
 			})
 			
 			const morningOut = calculateSched({
@@ -123,19 +126,38 @@ function pushUnixToDtr(userSched) {
 				date: date, 
 				duration: workSched.morningOut,
 				option: 'min',
-				underTime: '-30',
 			})
 
-			
+			const afternoonIn = calculateSched({
+				records: value['record'],
+				date: date, 
+				duration: workSched.afternoonIn,
+				option: 'min',
+				other: [
+					{duration: ['12:00', '12:05'], option: 'max'},
+					{duration: ['12:10', '12:15'], option: 'min'},
+					{duration: ['12:20', '12:30'], option: 'max'},
+				],
+			})
+
+			const afternoonOut = calculateSched({
+				records: value['record'],
+				date: date, 
+				duration: workSched.afternoonOut,
+				option: 'max',
+			})
 
 			console.log('morning in: ' + convertUnixToDate(morningIn))
 			console.log('morning out: ' + convertUnixToDate(morningOut))
+			console.log('afternoon In: ' + convertUnixToDate(afternoonIn))
+			console.log('afternoon Out: ' + convertUnixToDate(afternoonOut))
+			console.log('')
 		}
 
 	}
 }
 
-function calculateSched({records, date, duration, option, underTime}) {
+function calculateSched({records, date, duration, option, other}) {
 	let timeStart = duration[0]
 	let timeEnd = duration[1]
 	let unixStart = convertDateToUnix(new Date(`${date} ${timeStart}`))
@@ -153,12 +175,23 @@ function calculateSched({records, date, duration, option, underTime}) {
 		})
 
 		if(filtered.length === 0) {
-			if(underTime) {
-				option = 'max'
-				return filtered = filterStartToEnd({
-					start: unixStart += convertMinToUnix(underTime),
-					end: unixEnd += convertMinToUnix(underTime),
-				})
+			if(other) {
+				let otherEntries = other.entries()
+				for (const [index, value] of otherEntries) {
+					option = value['option']
+					dateStart = value['duration'][0]
+					dateEnd = value['duration'][1]
+
+					filtered = filterStartToEnd({
+						start: convertDateToUnix(new Date(`${date} ${dateStart}`)),
+						end: convertDateToUnix(new Date(`${date} ${dateEnd}`)),
+					})
+
+					if(filtered.length > 0) {
+						return filtered
+						break
+					}
+				}
 			}
 		}else if(filtered.length > 0) return filtered
 			
@@ -169,7 +202,9 @@ function calculateSched({records, date, duration, option, underTime}) {
 		}		
 	}
 
-	function getCalculatedTime(filtered) {
+	function getCalculatedTime(filtered) { //invalid or 0 for now
+		if(filtered == undefined) return 'invalid'
+
 		if(filtered.length > 0) {
 			switch(option) {
 				case 'min':
@@ -179,7 +214,7 @@ function calculateSched({records, date, duration, option, underTime}) {
 					return Math.max(...filtered)
 				break
 			}
-		} else return 0
+		} else return 'invalid'
 	}
 
 	function checker(record) {
@@ -196,4 +231,4 @@ function calculateSched({records, date, duration, option, underTime}) {
 }
 
 pushUnixToDtr(userSched)
-console.log(userSched)
+// console.log(userSched)
