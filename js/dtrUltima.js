@@ -71,7 +71,7 @@ const userSched = [
 					{time: '8:10'},
 					{time: '12:21'},
 					{time: '13:45'},
-					// {time: '17:00'},
+					{time: '17:00'},
 				]
 			}
 		]
@@ -225,10 +225,9 @@ function calculateSched({records, date, duration, option, other}) {
 		})	
 	}
 	
-
 	checker(records)
 	return getFinalTime
 }
 
 pushUnixToDtr(userSched)
-// console.log(userSched)
+console.log(userSched)
