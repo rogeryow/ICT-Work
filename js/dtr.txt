@@ -231,7 +231,7 @@ function calculateSched({records, date, duration}) {
 		// console.log(getFinalTime)
 		records.forEach((record) => {
 			if(record['unix'] == getFinalTime) {
-				record['check'] = status
+				record['status'] = status
 			}
 		})	
 	}

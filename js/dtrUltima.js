@@ -114,7 +114,7 @@ function formulaUnixToDate(unix) {
 	return new Date(unix * ONE_SEC_IN_MILISEC)
 }
 
-function pushUnixToDtr(userSched) {
+function calculateSchedule(userSched) {
 	let userEntries = userSched.entries()
 	for (const [index, value] of userEntries) {
 
@@ -128,8 +128,7 @@ function pushUnixToDtr(userSched) {
 				value['unix'] = convertDateToUnix(new Date(timestamp))
 			}
 
-			console.log(date)
-			const morningIn = calculateSched({
+			const morningIn = getTimeBetween({
 				records: value['record'],
 				date: date, 
 				duration: [
@@ -138,7 +137,7 @@ function pushUnixToDtr(userSched) {
 				],
 			})
 
-			const morningOut = calculateSched({
+			const morningOut = getTimeBetween({
 				records: value['record'],
 				date: date, 
 				duration: [
@@ -147,7 +146,7 @@ function pushUnixToDtr(userSched) {
 				],
 			})
 
-			const afternoonIn = calculateSched({
+			const afternoonIn = getTimeBetween({
 				records: value['record'],
 				date: date, 
 				duration: [
@@ -156,7 +155,7 @@ function pushUnixToDtr(userSched) {
 				],
 			})
 
-			const afternoonOut = calculateSched({
+			const afternoonOut = getTimeBetween({
 				records: value['record'],
 				date: date, 
 				duration: [
@@ -166,6 +165,7 @@ function pushUnixToDtr(userSched) {
 				],
 			})
 
+			console.log(date)
 			console.log('morning in: ' + convertUnixToDate(morningIn))
 			console.log('morning out: ' + convertUnixToDate(morningOut))
 			console.log('afternoon In: ' + convertUnixToDate(afternoonIn))
@@ -176,7 +176,7 @@ function pushUnixToDtr(userSched) {
 	}
 }
 
-function calculateSched({records, date, duration}) {
+function getTimeBetween({records, date, duration}) {
 	let status = ''
 	let filtered = calculateRecords(records)
 	let getFinalTime = getCalculatedTime(filtered) 	
@@ -239,5 +239,5 @@ function calculateSched({records, date, duration}) {
 	return getFinalTime
 }
 
-pushUnixToDtr(userSched)
+calculateSchedule(userSched)
 console.log(userSched)
