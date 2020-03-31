@@ -8,14 +8,14 @@ const workSched = {
 	afternoonOut: ['17:00', '17:30'],
 }
 
-const userSched = [
+const testSched = [
 	{
 		ID: '101', dtr:
 		[ 
 			{
-				date: '3/18/2020',
+				date: '3-18-2020',
 				record:[
-					{time: '7:29'},
+					{time: '7:29:11'},
 					{time: '7:30'},
 					{time: '7:31'},
 					{time: '8:00'},
@@ -115,13 +115,14 @@ function formulaUnixToDate(unix) {
 }
 
 function calculateSchedule(userSched) {
+	console.log(userSched)
 	let userEntries = userSched.entries()
 	for (const [index, value] of userEntries) {
-
+		let id = value['ID']
 		let entry = Object.entries(value['dtr'])
 		for (const [key, value] of entry) {
-
 			let date = value['date']
+
 			let records = Object.entries(value['record'])
 			for (const [key, value] of records) {
 				let timestamp = `${date} ${value['time']}`
@@ -164,7 +165,7 @@ function calculateSchedule(userSched) {
 					{duration: ['14:01', '17:00'], option: 'max', status: 'undertime', },
 				],
 			})
-
+			console.log(id)
 			console.log(date)
 			console.log('morning in: ' + convertUnixToDate(morningIn))
 			console.log('morning out: ' + convertUnixToDate(morningOut))
@@ -239,5 +240,88 @@ function getTimeBetween({records, date, duration}) {
 	return getFinalTime
 }
 
-calculateSchedule(userSched)
-console.log(userSched)
+function readFile() {
+	return new Promise((resolve) => {
+		const userSched = new Array()
+		const reader = new FileReader()
+		reader.onload = function() {
+			const lines = reader.result.split('\n')
+			const setId =  new Set()
+			
+			const lineEntries = lines.entries()
+			for (const [index, value] of lineEntries) {
+				setId.add(value.substring('0','9'))
+			}
+
+			const setIdEntries = Array.from(setId).sort().entries()
+			for (const [index, value] of setIdEntries) {
+				if(value.length > 0) {
+					userSched.push({ID: value.trim(), dtr: []})
+				}
+			}
+
+			const pushDate = new Promise((resolve) => {
+				const lineEntries2 = lines.entries()
+				for (const [index, value] of lineEntries2) {
+					let id = value.substring('0','9').trim()
+					let date = value.substr('10','11')
+
+					const userSchedEntries = userSched.entries()
+					for (const [index, value] of userSchedEntries) {
+						let passer = false
+						if(value['ID'] == id) {
+
+							if(value['dtr'].length > 0) {
+
+								const dtrEntries = value['dtr'].entries()
+								for (const [index, dtr] of dtrEntries) {	
+									if(dtr['date'] != date) {
+										passer = true
+									}else {
+										passer = false
+									}
+								}
+
+							} else {
+								passer = true
+							}
+							
+							if(passer) {
+								value['dtr'].push({date: date, record: []})
+							} 
+						}
+
+					}
+				}
+				resolve(userSched)
+			})
+
+			pushDate.then((userSched) => {
+				const lineEntries3 = lines.entries()
+				for (const [index, value] of lineEntries3) {
+					let id = value.substring('0','9').trim()
+					let date = value.substr('10','11')
+					let time = value.substring('21','29')
+
+					const userSchedEntries = userSched.entries()
+					for (const [index, value] of userSchedEntries) {
+						
+						if(value['ID'] == id) {
+							const dateEntries = value['dtr'].entries()
+							for (const [key, value] of dateEntries) {
+								if(value['date'] == date) {
+									value['record'].push({time: time})
+								}
+							}
+						}
+					
+					}
+				}
+				console.log(userSched)
+			calculateSchedule(userSched)
+			})
+		}
+		reader.readAsText(input.files[0])
+		resolve(userSched)
+	})
+}
