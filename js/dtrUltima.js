@@ -1,5 +1,6 @@
 const ONE_SEC_IN_MILISEC = 1000
 const ONE_MIN_IN_SEC =  60
+var dtr = []
 
 const workSched = {
 	morningIn:    ['7:00', '9:00'],
@@ -7,89 +8,6 @@ const workSched = {
 	afternoonIn:  ['12:31', '13:00'],
 	afternoonOut: ['17:00', '17:30'],
 }
-
-const testSched = [
-	{
-		ID: '101', dtr:
-		[ 
-			{
-				date: '3-18-2020',
-				record:[
-					{time: '7:29:11'},
-					{time: '7:30'},
-					{time: '7:31'},
-					{time: '8:00'},
-					{time: '8:05'},
-					{time: '8:09'},
-					{time: '11:58'},
-					{time: '11:59'},
-					// {time: '12:00'},
-					// {time: '12:00'},
-					{time: '13:00'},
-					{time: '13:09'},
-					{time: '16:49'},
-				]
-			},
-			{
-				date: '3/19/2020',
-				record: [
-					{time: '7:30'},
-					{time: '7:31'},
-					{time: '8:00'},
-					{time: '8:15'},
-					{time: '8:10'},
-					{time: '12:01'},
-					{time: '13:35'},
-					{time: '16:59'},
-				]
-			}
-		]
-	},
-
-	{
-		ID: '102', dtr:
-		[ 
-			{
-				date: '3/20/2020',
-				record:[
-					{time: '7:31'},
-					{time: '8:07'},
-					{time: '8:20'},
-					// {time: '11:30'},
-					{time: '12:00'},
-					{time: '12:30'},
-					{time: '12:35'},
-					{time: '13:01'},
-				]
-			},
-			{
-				date: '3/21/2020',
-				record: [
-					{time: '7:30'},
-					{time: '7:31'},
-					{time: '8:15'},
-					{time: '8:16'},
-					{time: '8:10'},
-					{time: '12:21'},
-					{time: '13:45'},
-					{time: '17:00'},
-				]
-			},
-			{
-				date: '3/23/2020',
-				record: [
-					{time: '7:30'},
-					{time: '7:31'},
-					{time: '8:15'},
-					{time: '8:16'},
-					{time: '8:10'},
-					{time: '12:21'},
-					{time: '13:45'},
-				]
-			}
-		]
-	},
-]
 
 function convertDateToUnix(date) {
 	date = (typeof date === 'undefined') ? new Date() : date
@@ -112,6 +30,18 @@ function formulaDateToUnix(date) {
 
 function formulaUnixToDate(unix) {
 	return new Date(unix * ONE_SEC_IN_MILISEC)
+}
+
+function convertDateToTime(date) {
+	if(date == 'Invalid Date') return 0
+	let hours = date.getHours()
+	let minutes = date.getMinutes()
+	let ampm = hours >= 12 ? 'PM' : 'AM'
+	hours = hours % 12
+	hours = hours ? hours : 12
+	minutes = minutes < 10 ? '0' + minutes : minutes
+	let strTime = hours + ':' + minutes + ' ' + ampm
+	return strTime
 }
 
 function calculateSchedule(userSched) {
@@ -165,16 +95,39 @@ function calculateSchedule(userSched) {
 					{duration: ['14:01', '17:00'], option: 'max', status: 'undertime', },
 				],
 			})
-			console.log(id)
-			console.log(date)
-			console.log('morning in: ' + convertUnixToDate(morningIn))
-			console.log('morning out: ' + convertUnixToDate(morningOut))
-			console.log('afternoon In: ' + convertUnixToDate(afternoonIn))
-			console.log('afternoon Out: ' + convertUnixToDate(afternoonOut))
-			console.log('')
+			// console.log(id)
+			// console.log(date)
+			// console.log('morning in: ' + convertDateToTime(convertUnixToDate(morningIn)))
+			// console.log('morning out: ' + convertDateToTime(convertUnixToDate(morningOut)))
+			// console.log('afternoon In: ' + convertDateToTime(convertUnixToDate(afternoonIn)))
+			// console.log('afternoon Out: ' + convertDateToTime(convertUnixToDate(afternoonOut)))
+			// console.log('')
+			let record = []
+			record.push(id)
+			record.push(date)
+			record.push(convertDateToTime(convertUnixToDate(morningIn)))
+			record.push(convertDateToTime(convertUnixToDate(morningOut)))
+			record.push(convertDateToTime(convertUnixToDate(afternoonIn)))
+			record.push(convertDateToTime(convertUnixToDate(afternoonOut)))
+			dtr.push(record)
 		}
-
 	}
+	// console.log(dtr)
+	fillTable(dtr)
+}
+
+function fillTable(dtr) {
+	$('#table-dtr').DataTable( {
+		data: dtr,
+		columns: [
+		    { title: 'ID' },
+		    { title: 'Date' },
+		    { title: 'Morning In' },
+		    { title: 'Morning Out.' },
+		    { title: 'Afternoon In' },
+		    { title: 'Afternoon Out' }
+		]
+	})	
 }
 
 function getTimeBetween({records, date, duration}) {

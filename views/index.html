@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>DTR</title>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 </head>
 <body>
 	<input type="file" name="">
-	<script type="text/javascript" src="../js/dtrReader.js"></script>
-	<script type="text/javascript" src="../js/dtrUltima.js"></script>
-	<script type="text/javascript">
-		const input = document.querySelector('input[type="file"')
-		input.addEventListener('change', function(evt) {
-			readFile()
-		})
-	</script>
+	<table id="table-dtr" class="display" width="100%"></table>
+
+
+	<!-- cnd start -->
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+	<!-- cnd end -->
+	<script src="../js/dtrUltima.js"></script>
+	<script src="../js/main.js"></script>
 </body>
 </html>
