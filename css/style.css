@@ -1,44 +1,7 @@
-body {
-	font-size: 16px;
-	background-color: skyblue;
-	color: #fff;
-	font-family: verdana;
+.absent {
+	background-color: #e6e6e6;
 }
 
-.wrapper {
-	width: 40%;
-	margin: 30px auto;
-}
-
-.btn {
-	padding: 10px 30px;
-	background-color: floralwhite;
-	border: 1px solid #f3f3f3;
-	cursor: pointer;
-	color: dimgray;
-	font-size: 20px;
-	margin: 10px 0;
-	width: 100%;
-}
-
-input.inpDtr {
-	display: block;
-	width: 99.5%;
-	padding: 10px 0;
-	text-align: center;
-	font-size: 18px;
-}
-
-ul.list {
-	padding: 30px;
-	color: grey;
-	height: 100px;
-	background-color: #fff;
-	margin: 0;
-	overflow-y: scroll;
-}
-
-ul.list li {
-	font-size: 14px;
-	padding: 5px 5px;
+.green {
+	background-color: #90ee90;
 }

@@ -126,8 +126,57 @@ function fillTable(dtr) {
 		    { title: 'Morning Out.' },
 		    { title: 'Afternoon In' },
 		    { title: 'Afternoon Out' }
-		]
+		],
+		'createdRow': function( row, data, dataIndex){
+            let morningIn = data[2]
+            let morningOut = data[3]
+            let afternoonIn = data[4]
+            let afternoonOut = data[5]
+			console.log(ampmTo24(afternoonOut))                    
+            // fillColumnColor({data: morningIn, row: row, index: 2})
+            // fillColumnColor({data: morningOut, row: row, index: 3})
+            // fillColumnColor({data: afternoonIn, row: row, index: 4})
+            // fillColumnColor({data: afternoonOut, row: row, index: 5})
+        }
 	})	
+
+	function ampmTo24(time) {
+		var hours = Number(time.match(/^(\d+)/)[1]);
+		var minutes = Number(time.match(/:(\d+)/)[1]);
+		var AP = time.match(/\s(.*)$/);
+		if (!AP) AP = time.slice(-2);
+		else AP=AP[1];
+		if(AP == "PM" && hours<12) hours = hours+12;
+		if(AP == "AM" && hours==12) hours = hours-12;
+		var Hours24 = hours.toString();
+		var Minutes24 = minutes.toString();
+		if(hours<10) Hours24 = "0" + Hours24;
+		if(minutes<10) Minutes24 = "0" + Minutes24;
+
+		return Hours24 + ":" + Minutes24
+	}
+	// function normalizeTime(time) {
+	// 	console.log(convertDateToUnix(new Date('5:51')))
+	// 	// if(time.toString().includes('AM')) {
+	// 	// 	time = time.replace('AM', '')
+	// 	// 	console.log(convertDateToUnix(new Date(time)))
+	// 	// }
+	// }
+
+	function fillColumnColor({data, row, index}) {
+		if(data == 0) {
+            row.children[index].classList.add('absent')
+            row.children[index].innerHTML = ''
+        } else {
+        	data = data.substring(0,5)
+        }
+
+        switch(index) {
+        	case 2:
+        		row.children[index].classList.add('green')
+        	break
+        }
+	}
 }
 
 function getTimeBetween({records, date, duration}) {
