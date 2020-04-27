@@ -15,6 +15,12 @@ class Person extends CI_Controller {
 		$this->load->view('person_view');
 	}
 
+	public function upload()
+	{
+		$this->load->helper('url');
+		$this->load->view('upload_logs');
+	}
+
 	public function ajax_list()
 	{
 		$list = $this->person->get_datatables();
@@ -23,15 +29,17 @@ class Person extends CI_Controller {
 		foreach ($list as $person) {
 			$no++;
 			$row = array();
-			$row[] = $person->firstName;
-			$row[] = $person->lastName;
-			$row[] = $person->gender;
-			$row[] = $person->address;
-			$row[] = $person->dob;
+			$row[] = $person->user_id;
+			$row[] = $person->name;
+			$row[] = $person->date;
+			$row[] = $person->morning_in;
+			$row[] = $person->morning_out;
+			$row[] = $person->afternoon_in;
+			$row[] = $person->afternoon_out;
 
 			//add html for action
-			$row[] = '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="Edit" onclick="edit_person('."'".$person->id."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
-				  <a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Hapus" onclick="delete_person('."'".$person->id."'".')"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+			// $row[] = '<a class="btn btn-sm btn-primary" href="javascript:void(0)" title="Edit" onclick="edit_person('."'".$person->id."'".')"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+			// 	  <a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Hapus" onclick="delete_person('."'".$person->id."'".')"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
 		
 			$data[] = $row;
 		}
@@ -137,4 +145,28 @@ class Person extends CI_Controller {
 		}
 	}
 
+	function upload_logs() {
+		$logs = json_decode($_POST['logs']);
+		$keys = array('user_id', 'date', 'morning_in', 'morning_out', 'afternoon_in', 'afternoon_out');
+		$data = [];
+
+		foreach($logs as $log) {
+			$newData = array(
+				'user_id' => $log[0],
+				'date' => $log[1],
+				'morning_in' => $log[2],
+				'morning_out' => $log[3],
+				'afternoon_in' => $log[4],
+				'afternoon_out' => $log[5],
+			);
+			array_push($data, $newData);
+		}
+
+		// $insert = $this->person->save($data);
+		$insert = $this->person->save_batch($data);
+		echo json_encode(array("status" => TRUE));
+		echo json_encode($data);
+	}
+
 }
+	

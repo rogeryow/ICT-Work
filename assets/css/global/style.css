@@ -1,0 +1,21 @@
+.absent {
+	background-color: #e6e6e6;
+}
+
+.green {
+	background-color: #90ee90;
+}
+
+.dark-green {
+	background-color: #64e764;
+}
+
+#drop-area {
+	width: 80rem;
+	padding: 50px 20px;
+	border: 2px dashed #ccc;
+}
+
+#drop-area.highlight {
+  border-color: purple;
+}

@@ -3,10 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Person_model extends CI_Model {
 
-	var $table = 'persons';
-	var $column_order = array('firstname','lastname','gender','address','dob',null); //set column field database for datatable orderable
-	var $column_search = array('firstname','lastname','address'); //set column field database for datatable searchable just firstname , lastname , address are searchable
-	var $order = array('id' => 'desc'); // default order 
+	var $table = 'vw_logs';
+	var $table_logs = 'logs';
+	var $column_order = array('user_id','name','date','morning_in','morning_out','afternoon_in','afternoon_out'); //set column field database for datatable orderable
+	var $column_search = array('user_id','name','date','morning_in','morning_out','afternoon_in','afternoon_out'); //set column field database for datatable searchable just firstname , lastname , address are searchable
+	var $order = array('user_id' => 'desc'); // default order 
 
 	public function __construct()
 	{
@@ -90,6 +91,12 @@ class Person_model extends CI_Model {
 		return $this->db->insert_id();
 	}
 
+	public function save_batch($data)
+	{
+		$this->db->insert_batch($this->table_logs, $data);
+		return $this->db->insert_id();
+	}
+
 	public function update($where, $data)
 	{
 		$this->db->update($this->table, $data, $where);
@@ -101,6 +108,5 @@ class Person_model extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->delete($this->table);
 	}
-
 
 }
