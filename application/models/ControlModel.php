@@ -14,6 +14,8 @@ class ControlModel extends CI_Model {
 	var $where = array();
 	var $having = array();
 	var $group = array();
+	var $date_start = "";
+	var $date_end = "";
 
 
 	public function set_table($val){
@@ -74,6 +76,26 @@ class ControlModel extends CI_Model {
 		return $this->db->group_by($this->group);
 	}
 
+	public function set_date_start($date) {
+		$this->date_start = $date;
+	}
+
+	public function set_date_end($date) {
+		$this->date_end = $date;
+	}
+
+	public function get_date_start() {
+		if(!empty($this->date_start)) {
+			return $this->db->where('date >=', $this->date_start);
+		}
+	}
+
+	public function get_date_end() {
+		if(!empty($this->date_end)) {
+			return $this->db->where('date <=', $this->date_end);
+		}
+	}
+
 	public function __construct( ){
 		parent::__construct();
 		$this->load->database();
@@ -83,6 +105,9 @@ class ControlModel extends CI_Model {
 		$this->get_having();
 		$this->get_like();
 		$this->get_table();
+		$this->get_date_start();
+		$this->get_date_end();
+
 
 		if(!empty($this->join_table)){ $this->get_join(); }
 		if(!empty($this->group)){ $this->get_group(); }
@@ -91,7 +116,7 @@ class ControlModel extends CI_Model {
 	
 		foreach ($this->column_search as $item) {
 			if($_POST['search']['value']) {
-			
+				
 				if($i===0) {
 					$this->db->group_start();
 					$this->db->like($item, $_POST['search']['value']);

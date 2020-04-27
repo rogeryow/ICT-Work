@@ -3,52 +3,30 @@ import * as vars from './library/variables.js'
 import { DataTable } from './library/dataTable.js'
 
 
-function eventListeners() {
-
-	document.addEventListener('DOMContentLoaded', function() {
-		helper.loadCSS(vars.styleFiles)
-		helper.loadScript(vars.scriptFiles)
-	})
-
-	window.addEventListener('load', function() {
-		const table = new dataTable(option)
-		table.createTable()
-		const get = document.getElementById('search').value
-		// table.bindData('name', get)
-		table.search()
-  //   	tables.disability.init()
-		// tables.disability.getRowData()
-		// this.search()
-	})
-
-}
-
-const conns = {
-	disability: {
-		url:   'control/getDataByID', 
-		table: 'vw_Disability_list', 
-		field: 'id', 
-		value: '',	
-	}
-}
-
-const option = {
+const tableOption = {
 	id: '#demo',
 	ajax: {
     	url: `${helper.getPath.path}control/getTableUsers`,
     	data: function(data) {
     		data['name'] = document.getElementById('search').value
-    	}
+    		data['date_start'] = document.getElementById('date-start').value
+    		data['date_end'] = document.getElementById('date-end').value
+    	},
 	}, 
 	columns: [
-		{ title: 'ID', data:  'id', },
-		{ title: 'Name', data:  'name', width: '90%', },
+		{ title: 'ID', data:  'user_id',},
+		{ title: 'Name', data:  'name',  },
+		{ title: 'Date', data:  'date', },
+		{ title: 'Morning In', data: 'morning_in', },
+		{ title: 'Morning Out', data: 'morning_out', },
+		{ title: 'Afternoon In', data: 'afternoon_in', },
+		{ title: 'Afternoon Out', data: 'afternoon_out', },
 	],
 }
 
 class dataTable extends DataTable {
 	constructor() {
-		super(option)
+		super(tableOption)
 	}
 
 	search() {
@@ -61,46 +39,19 @@ class dataTable extends DataTable {
 
 }
 
+function eventListeners() {
 
-// tables.disability = {
-// 	option: {
-// 		id: '#demo',
-// 		ajax: `${helper.getPath.path}control/getTableUsers`,
-// 		columns: [
-// 			{ title: 'ID', data:  'id', },
-// 			{ title: 'Name', data:  'name', width: '90%', },
-// 		],
-// 	},
+	document.addEventListener('DOMContentLoaded', function() {
+		helper.loadCSS(vars.styleFiles)
+		helper.loadScript(vars.scriptFiles)
+	})
 
-// 	init: function() {
-// 		this.dataTable = new DataTable(this.option)
-// 		this.dataTable.options.ajax.data = function(data) {
-// 			const searchValue = ''
-// 			// const eldocument.getElementById('searchDisability').value
-// 			data.name = searchValue
-// 		}
-// 		this.dataTable.createTable()
-// 	},
+	window.addEventListener('load', function() {
+		const table = new dataTable(tableOption)
+		table.createTable()
+		table.search()
+	})
 
-// 	getRowData: function() {
-// 		this.dataTable.table[0].tBodies[0]
-// 		.addEventListener('click', function(ev){
-// 			conns.disability.value = helper.getTableRow(ev)[0]
-// 			helper.getDataByField(conns.disability).then((data) => {
-// 				console.log(data[0])
-// 			})
-// 		})
-// 	},
-
-// 	search: function() {
-// 		const delay = 1000
-// 		const search = helper.delay(() => this.dataTable.refresh() , delay)
-// 		document.getElementById('searchDisability').addEventListener('keyup', (ev) => {
-// 	  		search()
-// 		}) 
-// 	},
-
-// }
-
+}
 
 eventListeners()
