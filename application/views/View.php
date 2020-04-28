@@ -26,6 +26,9 @@
                 <span>End Date</span>
                 <input id="date-end" type="date" name="date-end" class="form-control">
             </div>
+            <div class="inline-block box-space">
+                <button id="btn-print" class="btn btn-success">Print</button>
+            </div>
         </div>
         
         <div class="row justify-content-md-center"> 

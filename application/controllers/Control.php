@@ -22,6 +22,23 @@ class Control extends CI_Controller {
 		$this->control->getDataByID($table, $col, $id);
 	}
 
+	public function getLogs($name, $date_start = "", $date_end = "") {
+		if($name != "") {
+			$this->control->set_like(array( "name"=> $name));
+		}
+
+		if($date_start != "") {
+			$this->control->set_date_start($date_start);
+		}
+
+		if($date_end != "") {
+			$this->control->set_date_end($date_end);
+		}
+
+		$this->control->set_table("vw_logs");
+		echo json_encode($this->control->getLogs());
+	}
+
 	public function getTableUsers() {
 		$cols = array(
 			"user_id",

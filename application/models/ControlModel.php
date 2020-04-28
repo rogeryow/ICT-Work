@@ -101,6 +101,17 @@ class ControlModel extends CI_Model {
 		$this->load->database();
 	}
 
+	public function getLogs() {
+		$this->get_having();
+		$this->get_like();
+		$this->get_table();
+		$this->get_date_start();
+		$this->get_date_end();
+
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	private function _get_datatables_query() {	
 		$this->get_having();
 		$this->get_like();
