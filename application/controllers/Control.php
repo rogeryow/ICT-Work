@@ -22,9 +22,41 @@ class Control extends CI_Controller {
 		$this->control->getDataByID($table, $col, $id);
 	}
 
-	public function getLogs($name, $date_start = "", $date_end = "") {
+	public function getDept() {
+		echo json_encode($this->control->getDept());
+	}
+
+	public function getLogs() {
+		$uri = $this->uri->uri_to_assoc();
+
+		$name = "";
+		$date_start = "";
+		$date_end = "";
+		$department = "";
+
+		if(!empty($uri['name'])) {
+			$name = $uri['name'];
+		}
+
+		if(!empty($uri['date_start'])) {
+			$date_start = $uri['date_start'];
+		}
+
+		if(!empty($uri['date_end'])) {
+			$date_end = $uri['date_end'];
+		}
+
+		if(!empty($uri['department'])) {
+			$department = $uri['department'];
+		}
+
+		if($department != "") {
+			$this->control->set_like(array( "group_id" => $department));
+		}
+		
 		if($name != "") {
 			$this->control->set_like(array( "name"=> $name));
+			$this->control->set_or_like(array( "user_id"=> $name));
 		}
 
 		if($date_start != "") {
@@ -57,9 +89,15 @@ class Control extends CI_Controller {
 		$name = $this->input->post('name');
 		$date_start = $this->input->post('date_start');
 		$date_end = $this->input->post('date_end');
+		$dept = $this->input->post('department');
+
+		if($dept != "") {
+			$this->control->set_like(array( "group_id" => $dept));
+		}
 
 		if($name != "") {
-			$this->control->set_like(array( "name"=> $name));
+			$this->control->set_like(array( "name" => $name));
+			$this->control->set_or_like(array( "user_id" => $name));
 		}
 
 		if($date_start != "") {
@@ -97,6 +135,7 @@ class Control extends CI_Controller {
 			"name" => $name,
 			"dateStart" => $date_start,
 			"dateEnd" => $date_end,
+			"department" => $dept,
 		);
 		//output to json format
 		echo json_encode($output);
