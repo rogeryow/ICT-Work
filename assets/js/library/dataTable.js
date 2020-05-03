@@ -36,7 +36,6 @@ export class DataTable{
 		this.option.ajax.url = option.ajax.url
 		this.option.ajax.data = option.ajax.data || ''
 		this.option.columns = option.columns
-
 	}
 
 	createTable() {

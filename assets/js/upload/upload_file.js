@@ -357,3 +357,102 @@ function readFile() {
 		resolve(userSched)
 	})
 }
+
+
+// 
+
+const btnUploadDb = document.getElementById('btn-upload-db')
+const fileUpload = document.getElementById('file-upload')
+const basePath = getPath.basePath+ '/DTR'
+
+fileUpload.addEventListener('change', function(evt) {
+	readFile()
+})
+
+btnUploadDb.addEventListener('click', uploadToDb)
+
+async  function uploadToDb() {
+    const dtrChunks = splitArray(dtr, 500)
+
+    console.log(dtrChunks)
+
+    const arrLength = dtrChunks.length
+	if(arrLength > 0) {
+		for(let index = 0; index < arrLength ; index++){	
+			startLoading({ 
+				msg: `updating database, please wait... ${index+1}/${arrLength}`,
+			})
+			
+			await insert(dtrChunks[index])
+				.then((val) => {
+					let inserts = 0
+					let dups = 0
+
+					inserts += parseInt(val['inserts'])
+					dups += parseInt(val['duplicates'])
+					
+					console.log(dups)
+					displayLoadingMessage({
+						insert: inserts,
+						dups: dups,
+					})	
+					console.log(`Chunk ${index} done!`)
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+    	}		
+	} else {
+		console.log('Please upload logs')
+	}
+
+	stopLoading()
+
+}
+
+function startLoading({msg}) {
+	document.getElementsByClassName('loader-wrapper')[0].style.display = "flex"
+	document.getElementById('loader-text').textContent = msg
+}
+
+function displayLoadingMessage({inserts, dups, }) {
+	document.getElementById('new').textContent = `New: ${inserts}`
+	document.getElementById('dups').textContent = `Duplicates: ${dups}`
+}
+
+function stopLoading() {
+	document.getElementsByClassName('loader-wrapper')[0].style.display = "none"
+}
+
+function splitArray(array, perChunk) {
+    let arrayChunks = []
+    const arraySize = array.length
+    const numOfLoops = Math.ceil(arraySize/perChunk)
+
+    for(let i = 0; i < numOfLoops ; i++){
+        arrayChunks.push(array.splice(0, perChunk))
+    }
+   
+    return arrayChunks
+}
+
+function insert(logs) {
+	return new Promise(function(resolve, reject) {
+		$.ajax({
+	        url : `${basePath}/control/upload_logs`,
+	        type: 'POST',
+	        data: {logs: JSON.stringify(logs)},
+	        dataType: 'JSON',
+	        success: function(data)
+	        {
+	        	console.log(data)
+	        	resolve(data)
+	        },
+	        error: function (jqXHR, textStatus, errorThrown)
+	        {
+	        	console.log(jqXHR.responseText)
+	        	reject(jqXHR.responseText)
+	        }
+	    })
+    })
+}

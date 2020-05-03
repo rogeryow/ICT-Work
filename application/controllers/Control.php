@@ -18,6 +18,33 @@ class Control extends CI_Controller {
 		$this->load->view('upload');
 	}
 
+	public function upload_logs() {
+		$logs = json_decode($_POST['logs']);
+				
+		if(empty($logs)) {
+			echo json_encode(array("status" => FALSE));
+		} else {
+			$keys = array('user_id', 'date', 'morning_in', 'morning_out', 'afternoon_in', 'afternoon_out');
+			$data = [];
+
+			foreach($logs as $log) {
+				$newData = array(
+					'user_id' => $log[0],
+					'date' => $log[1],
+					'morning_in' => $log[2],
+					'morning_out' => $log[3],
+					'afternoon_in' => $log[4],
+					'afternoon_out' => $log[5],
+				);
+				array_push($data, $newData);
+			}
+			
+			$obj = $this->control->save_batch($data);
+			echo json_encode(array("status" => TRUE, "duplicates" => $obj['duplicates'], "inserts" => $obj["inserts"]));
+		}
+		
+	}
+
 	public function getDataByID($table, $col, $id) {
 		$this->control->getDataByID($table, $col, $id);
 	}

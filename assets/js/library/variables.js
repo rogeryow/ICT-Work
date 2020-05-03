@@ -6,6 +6,7 @@ export const styleFiles = [
 	`${getPath.basePath}/DTR/assets/datatables/css/dataTables.bootstrap.css`,
 	`${getPath.basePath}/DTR/assets/bootstrap-datepicker/css/bootstrap-datepicker3.min.css`,
 	`${getPath.basePath}/DTR/assets/css/style.css`,
+	`${getPath.basePath}/DTR/assets/css/loader.css`,
 ]
 
 export const scriptFiles = [
@@ -16,9 +17,12 @@ export const scriptFiles = [
 	`${getPath.basePath}/DTR/assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js`,
 ]
 
+export const view = [
+	`${getPath.basePath}/DTR/assets/js/jspdf/jspdf.js`,
+	`${getPath.basePath}/DTR/assets/base64/base64.js`,
+]
+
 export const uploadScripts = [
 	`${getPath.basePath}/DTR/assets/js/upload/utils.js`,
 	`${getPath.basePath}/DTR/assets/js/upload/upload_file.js`,
-	`${getPath.basePath}/DTR/assets/js/upload/upload_main.js`,
-
 ]

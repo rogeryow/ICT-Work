@@ -19,6 +19,15 @@
         <table id="table-dtr" class="display" width="100%"></table> 
 
     </div>
+
+    <div class="loader-wrapper">
+
+        <p id="loader-text"></p>
+        <span class="loader"><span class="loader-inner"></span></span>
+
+        <p id="loader-info"><span id="new"></span> <span id="dups"></span></p>
+    </div>
+
     <script type="module" src="<?php echo base_url('assets/js/upload/upload.js')?>"></script>
 </body>
 </html>

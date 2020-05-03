@@ -16,7 +16,8 @@ class ControlModel extends CI_Model {
 	var $group = array();
 	var $date_start = "";
 	var $date_end = "";
-
+	var $name = "";
+	var $or_like = "";
 
 	public function set_table($val){
 		$this->table = $val;
@@ -65,7 +66,9 @@ class ControlModel extends CI_Model {
 	}
  
 	public function get_like() {
-		return $this->db->like($this->where);
+		if(!empty($this->where)) {
+			return $this->db->like($this->where);
+		}
 	}
 
 	public function get_having() {
@@ -96,29 +99,47 @@ class ControlModel extends CI_Model {
 		}
 	}
 
+	public function set_or_like($val) {
+		$this->or_like = $val;
+	}
+
+	public function get_or_like() {
+		if(!empty($this->or_like)) {
+			return $this->db->or_like($this->or_like);
+		}
+	}
+
+	public function getDept() {
+		$query = $this->db->from('group_name');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	public function __construct( ){
 		parent::__construct();
 		$this->load->database();
 	}
 
 	public function getLogs() {
-		$this->get_having();
 		$this->get_like();
+		$this->get_or_like();
 		$this->get_table();
 		$this->get_date_start();
 		$this->get_date_end();
 
 		$query = $this->db->get();
 		return $query->result();
+		// $query->result();
+		// print_r($this->db->last_query()); 
 	}
 
 	private function _get_datatables_query() {	
 		$this->get_having();
 		$this->get_like();
+		$this->get_or_like();
 		$this->get_table();
 		$this->get_date_start();
 		$this->get_date_end();
-
 
 		if(!empty($this->join_table)){ $this->get_join(); }
 		if(!empty($this->group)){ $this->get_group(); }
@@ -207,6 +228,28 @@ class ControlModel extends CI_Model {
 		$this->db->where($col, $id);
 		$result = $this->db->from($table)->get()->result();
 		echo json_encode($result);
+	}
+
+	public function save_batch($logs) {
+		$duplicates = 0;
+		$inserts = 0;
+		$insert_array = [];
+
+		foreach($logs as $log) {
+			$query = $this->db->query("SELECT * FROM logs WHERE user_id = " . $log['user_id'] . " AND logs.date = '" . $log['date'] . "' LIMIT 1");
+			if ($query->num_rows() > 0) {
+				$duplicates++;
+			} else {
+				array_push($insert_array, $log);
+				$inserts++;
+			}
+		}
+			
+		if(!empty($insert_array)) {
+			$this->db->insert_batch("logs", $insert_array);
+		}
+
+		return array("duplicates" => $duplicates, "inserts" => $inserts);
 	}
 
 }
